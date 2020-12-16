@@ -45,7 +45,11 @@ export function useToggle(
     validationState = 'valid',
   } = props;
 
-  let onPress = () => {
+  let onPress = (e) => {
+    // Enter should not check checkbox
+    if (e.key === 'Enter') {
+      return;
+    }
     state.setSelected(!state.isSelected);
   };
 
