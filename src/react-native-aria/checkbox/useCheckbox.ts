@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -42,6 +41,7 @@ export function useCheckbox(
     // indeterminate is a property, but it can only be set via javascript
     // https://css-tricks.com/indeterminate-checkboxes/
     if (inputRef.current) {
+      //@ts-ignore
       inputRef.current.indeterminate = isIndeterminate;
     }
   });
@@ -51,11 +51,15 @@ export function useCheckbox(
       ...inputProps,
       'checked': isSelected,
       'aria-checked': isIndeterminate ? 'mixed' : isSelected,
-      // Adding role as there's no input type="checkbox" in RN
-      'role': 'checkbox',
-      // react-native-web not whitelisting role prop. // check rn-web/filterSupportedProps.js file
+
       //@ts-ignore
+      // RN props
       'accessibilityRole': 'checkbox',
+      'accessibilityState': {
+        //@ts-ignore
+        ...inputProps.accessibilityState,
+        checked: isIndeterminate ? 'mixed' : isSelected,
+      },
     },
   };
 }

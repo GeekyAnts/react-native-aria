@@ -80,6 +80,11 @@ export function useToggle(
       name,
       'type': 'checkbox',
       ...interactions,
+
+      // RN props
+      'accessibilityState': {
+        disabled: isDisabled,
+      },
     }),
   };
 }

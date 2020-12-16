@@ -145,6 +145,7 @@
     "@react-aria/button": "^3.3.0",
     "@react-aria/checkbox": "^3.2.1",
     "@react-aria/focus": "^3.2.3",
+    "@react-stately/checkbox": "^3.0.1",
     "@react-stately/toggle": "^3.2.1"
   }
 }

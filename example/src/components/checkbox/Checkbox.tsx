@@ -1,43 +1,45 @@
-//@ts-nocheck
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useCheckbox } from 'react-native-aria';
+import React, { useContext, useRef } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { useCheckbox, useCheckboxGroupItem } from 'react-native-aria';
 import { useToggleState } from '@react-stately/toggle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { CheckboxGroupContext } from '../checkbox-group/CheckboxGroup';
 
-export function Checkbox() {
-  let state = useToggleState();
-  const ref = React.useRef(null);
-  const { inputProps } = useCheckbox(
-    {
-      'aria-label': 'checkbox label',
-    },
-    state,
-    ref
-  );
-  console.log({ inputProps });
+export function Checkbox(props: any) {
+  let originalProps = props;
+  let groupState = useContext(CheckboxGroupContext);
+  let inputRef = useRef<HTMLInputElement>(null);
+
+  let { inputProps } = groupState
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useCheckboxGroupItem(
+        {
+          ...props,
+          // Only pass isRequired and validationState to react-aria if they came from
+          // the props for this individual checkbox, and not from the group via context.
+          isRequired: originalProps.isRequired,
+          validationState: originalProps.validationState,
+        },
+        groupState,
+        inputRef
+      )
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useCheckbox(props, useToggleState(props), inputRef);
 
   return (
     <View>
-      <View>
-        <Text>Hello</Text>
-      </View>
       <TouchableOpacity {...inputProps}>
-        <MaterialCommunityIcons
-          size={30}
-          color={inputProps.checked ? 'green' : ''}
-          name={
-            inputProps.checked ? 'checkbox-marked' : 'checkbox-blank-outline'
-          }
-        />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <MaterialCommunityIcons
+            size={30}
+            color={inputProps.checked ? 'green' : 'black'}
+            name={
+              inputProps.checked ? 'checkbox-marked' : 'checkbox-blank-outline'
+            }
+          />
+          {props.children}
+        </View>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  checkboxWrapper: {
-    flex: 1,
-    alignItems: 'center',
-  },
-});
