@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { Checkbox } from './components/checkbox';
 
 export default function App() {
   return (
-    <View>
+    <SafeAreaView>
       <Checkbox />
-    </View>
+    </SafeAreaView>
   );
 }

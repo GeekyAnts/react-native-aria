@@ -1,7 +1,7 @@
 //@ts-nocheck
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useCheckbox, FocusRing } from 'react-native-aria';
+import { useCheckbox } from 'react-native-aria';
 import { useToggleState } from '@react-stately/toggle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -18,21 +18,19 @@ export function Checkbox() {
   console.log({ inputProps });
 
   return (
-    <View style={styles.checkboxWrapper}>
+    <View>
       <View>
         <Text>Hello</Text>
       </View>
-      <FocusRing focusClass="hello-world">
-        <TouchableOpacity {...inputProps}>
-          <MaterialCommunityIcons
-            size={30}
-            color={inputProps.checked ? 'green' : ''}
-            name={
-              inputProps.checked ? 'checkbox-marked' : 'checkbox-blank-outline'
-            }
-          />
-        </TouchableOpacity>
-      </FocusRing>
+      <TouchableOpacity {...inputProps}>
+        <MaterialCommunityIcons
+          size={30}
+          color={inputProps.checked ? 'green' : ''}
+          name={
+            inputProps.checked ? 'checkbox-marked' : 'checkbox-blank-outline'
+          }
+        />
+      </TouchableOpacity>
     </View>
   );
 }
