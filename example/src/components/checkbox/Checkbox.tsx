@@ -26,17 +26,18 @@ export function Checkbox(props: any) {
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckbox(props, useToggleState(props), inputRef);
 
+  let icon = 'checkbox-blank-outline';
+  if (inputProps['aria-checked'] === 'mixed') {
+    icon = 'checkbox-intermediate';
+  } else if (inputProps['aria-checked']) {
+    icon = 'checkbox-marked';
+  }
+
   return (
     <View>
       <TouchableOpacity {...inputProps}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <MaterialCommunityIcons
-            size={30}
-            color={inputProps.checked ? 'green' : 'black'}
-            name={
-              inputProps.checked ? 'checkbox-marked' : 'checkbox-blank-outline'
-            }
-          />
+          <MaterialCommunityIcons size={30} color={'green'} name={icon} />
           {props.children}
         </View>
       </TouchableOpacity>
