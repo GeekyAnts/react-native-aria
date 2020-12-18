@@ -13,7 +13,7 @@
 import type { AriaCheckboxProps } from '@react-types/checkbox';
 import { InputHTMLAttributes, RefObject, useEffect } from 'react';
 import type { ToggleState } from '@react-stately/toggle';
-import { useToggle } from '../toggle';
+import { useToggle } from '../../toggle';
 
 export interface CheckboxAria {
   /** Props for the input element. */

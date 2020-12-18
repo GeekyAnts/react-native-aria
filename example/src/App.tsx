@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { SafeAreaView, Text } from 'react-native';
-import { CheckboxGroup } from './components/checkbox-group/CheckboxGroup';
-
-import { Checkbox } from './components/checkbox';
-import { Radio, RadioGroup } from './components/radio-group/RadioGroup';
+import { Radio, RadioGroup, CheckboxGroup, Checkbox } from './components';
 
 export default function App() {
   return (

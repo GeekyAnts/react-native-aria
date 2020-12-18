@@ -16,7 +16,7 @@ import { filterDOMProps, mergeProps } from '@react-aria/utils';
 import type { InputHTMLAttributes, RefObject } from 'react';
 import { radioGroupNames } from './utils';
 import type { RadioGroupState } from '@react-stately/radio';
-import { usePress } from '../interactions/src/usePress';
+import { usePress } from '../../interactions/src/usePress';
 
 interface RadioAriaProps extends AriaRadioProps {
   /**

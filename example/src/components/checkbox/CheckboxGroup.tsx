@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react';
 import { useCheckboxGroupState } from '@react-stately/checkbox';
 import { useCheckboxGroup, useCheckboxGroupItem } from 'react-native-aria';

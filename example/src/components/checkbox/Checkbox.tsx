@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useContext, useRef } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import {
@@ -8,7 +9,7 @@ import {
 } from 'react-native-aria';
 import { useToggleState } from '@react-stately/toggle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { CheckboxGroupContext } from '../checkbox-group/CheckboxGroup';
+import { CheckboxGroupContext } from './CheckboxGroup';
 
 export function Checkbox(props: any) {
   let originalProps = props;
@@ -32,7 +33,7 @@ export function Checkbox(props: any) {
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckbox(props, useToggleState(props), inputRef);
 
-  console.log({ inputProps });
+  // console.log({ inputProps });
 
   let icon = 'checkbox-blank-outline';
   if (inputProps['aria-checked'] === 'mixed') {
@@ -43,12 +44,12 @@ export function Checkbox(props: any) {
 
   return (
     <View style={isFocusVisible ? { borderWidth: 2 } : {}}>
-      <InputWrapper {...inputProps} {...focusProps}>
+      <TouchableOpacity {...inputProps} {...focusProps}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <MaterialCommunityIcons size={30} color={'green'} name={icon} />
           {props.children}
         </View>
-      </InputWrapper>
+      </TouchableOpacity>
     </View>
   );
 }
