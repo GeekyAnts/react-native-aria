@@ -4,8 +4,26 @@ import type {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import type { PressEvents } from '../../types';
 import { mergeProps } from '@react-aria/utils';
+
+export interface PressEvents {
+  /** Handler that is called when the press is released over the target. */
+  onPress?: (e: GestureResponderEvent) => void;
+  /** Handler that is called when a press interaction starts. */
+  onPressStart?: (e: GestureResponderEvent) => void;
+  /**
+   * Handler that is called when a press interaction ends, either
+   * over the target or when the pointer leaves the target.
+   */
+  onPressEnd?: (e: GestureResponderEvent) => void;
+  /** Handler that is called when the press state changes. */
+  onPressChange?: (isPressed: boolean) => void;
+  /**
+   * Handler that is called when a press is released over the target, regardless of
+   * whether it started on the target or not.
+   */
+  onPressUp?: (e: GestureResponderEvent) => void;
+}
 
 export interface PressProps extends PressEvents {
   /** Whether the target is in a controlled press state (e.g. an overlay it triggers is open). */
