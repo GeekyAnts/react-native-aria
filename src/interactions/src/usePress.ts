@@ -4,14 +4,16 @@ import type {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
+import type { PressEvents } from '../../types';
 import { mergeProps } from '@react-aria/utils';
 
-export interface PressProps {
-  onPress?: any;
+export interface PressProps extends PressEvents {
   /** Whether the target is in a controlled press state (e.g. an overlay it triggers is open). */
   isPressed?: boolean;
   /** Whether the press events should be disabled. */
   isDisabled?: boolean;
+  /** Whether the target should not receive focus on press. */
+  preventFocusOnPress?: boolean;
 }
 
 export interface PressHookProps extends PressProps {
@@ -28,6 +30,11 @@ export interface PressResult {
 
 export function usePress({
   isDisabled,
+  onPress,
+  onPressStart,
+  onPressEnd,
+  onPressUp: _onPressUp, // No onPressUp on RN.
+  onPressChange,
   isPressed: isPressedProp,
   ...restProps
 }: PressHookProps): PressResult {
@@ -35,13 +42,17 @@ export function usePress({
 
   let pressProps = {
     onPress: (e: GestureResponderEvent) => {
-      restProps.onPress && restProps.onPress(e);
+      onPress && onPress(e);
     },
-    onPressIn: () => {
+    onPressIn: (e: GestureResponderEvent) => {
+      onPressStart && onPressStart(e);
       setPressed(true);
+      onPressChange && onPressChange(true);
     },
-    onPressOut: () => {
+    onPressOut: (e: GestureResponderEvent) => {
+      onPressEnd && onPressEnd(e);
       setPressed(false);
+      onPressChange && onPressChange(false);
     },
     disabled: isDisabled,
   };
@@ -49,7 +60,7 @@ export function usePress({
   pressProps = mergeProps(pressProps, restProps);
 
   return {
-    isPressed,
+    isPressed: isPressedProp || isPressed,
     pressProps,
   };
 }
