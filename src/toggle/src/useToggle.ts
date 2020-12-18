@@ -17,12 +17,13 @@ import type { InputHTMLAttributes, RefObject } from 'react';
 import type { ToggleState } from '@react-stately/toggle';
 import { useFocusable } from '@react-aria/focus';
 import { usePress } from '../../interactions/src/usePress';
+import type { TouchableOpacityProps } from 'react-native';
 
 export interface ToggleAria {
   /**
    * Props to be spread on the input element.
    */
-  inputProps: InputHTMLAttributes<HTMLInputElement>;
+  inputProps: TouchableOpacityProps;
 }
 
 /**
