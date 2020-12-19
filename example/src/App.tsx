@@ -1,52 +1,31 @@
 import * as React from 'react';
-import { SafeAreaView, Text } from 'react-native';
-import { Radio, RadioGroup, CheckboxGroup, Checkbox } from './components';
+import { SafeAreaView, Text, View } from 'react-native';
+import { Button, ToggleButton } from './components';
 
 export default function App() {
   return (
     <SafeAreaView
       style={{
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        maxHeight: '60%',
+        paddingTop: 100,
       }}
     >
-      <RadioExample />
-      <CheckboxExample />
+      <Text>Button with hover and focus visible example</Text>
+      <View style={{ marginVertical: 10, marginBottom: 40 }}>
+        <Button>
+          <Text style={{ color: 'white' }}>Test</Text>
+        </Button>
+      </View>
+
+      <Text>
+        Toggle button which sets aria-pressed in browser and AccessibilityState
+        in RN
+      </Text>
+      <View style={{ marginVertical: 10 }}>
+        <ToggleButton>
+          <Text style={{ color: 'white' }}>Test</Text>
+        </ToggleButton>
+      </View>
     </SafeAreaView>
   );
 }
-
-const CheckboxExample = () => {
-  const [state, setCheckbox] = React.useState([]);
-
-  return (
-    <CheckboxGroup
-      label="Favorite sports"
-      value={state}
-      onChange={(val: any) => {
-        setCheckbox(val);
-      }}
-    >
-      <Checkbox value="soccer">
-        <Text>Soccer</Text>
-      </Checkbox>
-      <Checkbox value="baseball">
-        <Text>Baseball</Text>
-      </Checkbox>
-      <Checkbox value="basketball">
-        <Text>Basketball</Text>
-      </Checkbox>
-    </CheckboxGroup>
-  );
-};
-
-const RadioExample = () => {
-  return (
-    <RadioGroup label="Favorite pet">
-      <Radio value="dogs">Dogs</Radio>
-      <Radio value="cats">Cats</Radio>
-    </RadioGroup>
-  );
-};

@@ -157,6 +157,8 @@
     "@react-aria/visually-hidden": "^3.2.1",
     "@react-stately/checkbox": "^3.0.1",
     "@react-stately/radio": "^3.2.1",
-    "@react-stately/toggle": "^3.2.1"
+    "@react-stately/toggle": "^3.2.1",
+    "react-dom": "^17.0.1",
+    "react-native-web": "^0.14.10"
   }
 }

@@ -6,7 +6,7 @@ import {
   TouchableOpacityProps,
   View,
 } from 'react-native';
-import { usePress } from '../src/usePress';
+import { usePress } from '../src/native/usePress';
 
 const isPressedStyles = {
   opacity: 0.6,
