@@ -25,8 +25,6 @@ export function Checkbox(props: any) {
     autoFocus: props.autoFocus,
   });
 
-  console.log('focus ', focusProps);
-
   let { inputProps } = groupState
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckboxGroupItem(

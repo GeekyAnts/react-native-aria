@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 import { Button, ToggleButton } from './components';
 import { Checkbox } from './components/checkbox/Checkbox';
 import { CheckboxGroup } from './components/checkbox/CheckboxGroup';

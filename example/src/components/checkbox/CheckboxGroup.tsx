@@ -19,10 +19,12 @@ export function CheckboxGroup(props) {
   let { groupProps, labelProps } = useCheckboxGroup(props, state);
 
   return (
-    <View {...groupProps}>
-      <Text accessibilityRole="label" {...labelProps} nativeID={labelProps.id}>
-        {label}
-      </Text>
+    <View {...groupProps} nativeID={groupProps.id}>
+      {label && (
+        <Text {...labelProps} nativeID={labelProps.id}>
+          {label}
+        </Text>
+      )}
       <CheckboxGroupContext.Provider value={state}>
         {children}
       </CheckboxGroupContext.Provider>
