@@ -15,13 +15,12 @@ export type RNAccessibilityLabelProps = {
 };
 
 export type RNAriaCheckboxGroupProps = AriaCheckboxGroupProps &
-  RNAccessibilityLabelProps;
+  RNAccessibilityLabelProps & { children?: React.ReactNode };
 
 export type RNCheckboxGroupAria = CheckboxGroupAria & {
   groupProps: {
-    accessibilityRole: AccessibilityRole;
     accessibilityState: AccessibilityState;
-  };
+  } & RNAccessibilityLabelProps;
 };
 
 export type RNAriaCheckboxProps = AriaCheckboxProps & RNAccessibilityLabelProps;

@@ -1,1 +1,1 @@
-export * from "@react-aria/toggle"
+export * from '@react-aria/toggle';

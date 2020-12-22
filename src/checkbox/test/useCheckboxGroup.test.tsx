@@ -7,12 +7,10 @@ import { useRef } from 'react';
 import type { RNAriaCheckboxProps } from 'src/types';
 import { AriaInputWrapper, useCheckboxGroup } from '../src/native';
 import { useCheckboxGroupItem } from '../src/native';
-import type {
-  AriaCheckboxGroupProps,
-  AriaCheckboxProps,
-} from '@react-types/checkbox';
+import type { AriaCheckboxProps } from '@react-types/checkbox';
 import { Text, View } from 'react-native';
 import { fireEvent, render } from '@testing-library/react-native';
+import type { RNAriaCheckboxGroupProps } from '../../types';
 
 const checkboxPropsArray = [
   { value: 'dogs', children: <Text>Dogs</Text> },
@@ -40,7 +38,7 @@ function CheckboxGroup({
   groupProps,
   checkboxProps,
 }: {
-  groupProps: AriaCheckboxGroupProps;
+  groupProps: RNAriaCheckboxGroupProps;
   checkboxProps: AriaCheckboxProps[];
 }) {
   const state = useCheckboxGroupState(groupProps);
@@ -50,8 +48,12 @@ function CheckboxGroup({
   );
 
   return (
+    //@ts-ignore
     <View {...checkboxGroupProps}>
-      {groupProps.label && <Text {...labelProps}>{groupProps.label}</Text>}
+      {groupProps.label && (
+        //@ts-ignore
+        <Text {...labelProps}>{groupProps.label}</Text>
+      )}
       <Checkbox checkboxGroupState={state} {...checkboxProps[0]} />
       <Checkbox checkboxGroupState={state} {...checkboxProps[1]} />
       <Checkbox checkboxGroupState={state} {...checkboxProps[2]} />
@@ -62,7 +64,7 @@ function CheckboxGroup({
 describe('useCheckboxGroup', () => {
   it('handles defaults', () => {
     let onChangeSpy = jest.fn();
-    let { getByLabelText, getAllByRole, getByText } = render(
+    let { getByA11yLabel, getAllByRole, getByText } = render(
       <CheckboxGroup
         groupProps={{ label: 'Favorite Pet', onChange: onChangeSpy }}
         checkboxProps={[
@@ -73,7 +75,7 @@ describe('useCheckboxGroup', () => {
       />
     );
 
-    let checkboxGroup = getByLabelText('Favorite Pet');
+    let checkboxGroup = getByA11yLabel('Favorite Pet');
     expect(checkboxGroup).toBeDefined();
 
     let checkboxes = getAllByRole('checkbox');

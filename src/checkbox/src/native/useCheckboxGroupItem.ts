@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*
  * Copyright 2020 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -12,11 +11,12 @@
  */
 
 import type { AriaCheckboxGroupItemProps } from '@react-types/checkbox';
-import { CheckboxAria, useCheckbox } from './useCheckbox';
+import { useCheckbox } from './useCheckbox';
 import { checkboxGroupNames } from './utils';
 import type { CheckboxGroupState } from '@react-stately/checkbox';
 import type { RefObject } from 'react';
 import { useToggleState } from '@react-stately/toggle';
+import type { RNCheckboxAria } from 'src/types';
 
 /**
  * Provides the behavior and accessibility implementation for a checkbox component contained within a checkbox group.
@@ -29,14 +29,17 @@ export function useCheckboxGroupItem(
   props: AriaCheckboxGroupItemProps,
   state: CheckboxGroupState,
   inputRef: RefObject<HTMLInputElement>
-): CheckboxAria {
+): RNCheckboxAria {
   const toggleState = useToggleState({
     isReadOnly: props.isReadOnly || state.isReadOnly,
+    //@ts-ignore
     isSelected: state.isSelected(props.value),
     onChange(isSelected) {
       if (isSelected) {
+        //@ts-ignore
         state.addValue(props.value);
       } else {
+        //@ts-ignore
         state.removeValue(props.value);
       }
 

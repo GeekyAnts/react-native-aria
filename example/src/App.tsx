@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import { Button, ToggleButton } from './components';
 import { Checkbox } from './components/checkbox/Checkbox';
 import { CheckboxGroup } from './components/checkbox/CheckboxGroup';
@@ -12,7 +12,7 @@ export default function App() {
         paddingTop: 100,
       }}
     >
-      {/* <Text>Button with hover and focus visible example</Text>
+      <Text>Button with hover and focus visible example</Text>
       <View style={{ marginVertical: 10, marginBottom: 40 }}>
         <Button>
           <Text style={{ color: 'white' }}>Test</Text>
@@ -27,7 +27,7 @@ export default function App() {
         <ToggleButton>
           <Text style={{ color: 'white' }}>Test</Text>
         </ToggleButton>
-      </View> */}
+      </View>
       <CheckboxExample />
     </SafeAreaView>
   );
@@ -47,10 +47,10 @@ const CheckboxExample = () => {
       <Checkbox value="soccer" isReadOnly>
         <Text>Soccer</Text>
       </Checkbox>
-      <Checkbox value="baseball" autoFocus>
+      <Checkbox value="baseball">
         <Text>Baseball</Text>
       </Checkbox>
-      <Checkbox value="basketball">
+      <Checkbox value="basketball" autoFocus>
         <Text>Basketball</Text>
       </Checkbox>
     </CheckboxGroup>

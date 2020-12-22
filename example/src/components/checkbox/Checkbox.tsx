@@ -9,15 +9,9 @@ import { useToggleState } from '@react-stately/toggle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { CheckboxGroupContext } from './CheckboxGroup';
 import { useFocusRing } from '@react-aria/focus';
+import type { RNAriaCheckboxProps } from 'src/types';
 
-export function Checkbox(props: any) {
-  let {
-    isIndeterminate = false,
-    isDisabled = false,
-    autoFocus,
-    ...otherProps
-  } = props;
-
+export function Checkbox(props: RNAriaCheckboxProps) {
   let groupState = useContext(CheckboxGroupContext);
   let inputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +23,7 @@ export function Checkbox(props: any) {
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckboxGroupItem(
         {
-          ...otherProps,
+          ...props,
           // Only pass isRequired and validationState to react-aria if they came from
           // the props for this individual checkbox, and not from the group via context.
           isRequired: props.isRequired,
@@ -41,17 +35,23 @@ export function Checkbox(props: any) {
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckbox(props, useToggleState(props), inputRef);
 
-  let icon = isIndeterminate
+  let icon = props.isIndeterminate
     ? 'checkbox-intermediate'
     : inputProps.checked
     ? 'checkbox-marked'
     : 'checkbox-blank-outline';
 
+  const iconColor = props.isDisabled ? 'gray' : 'green';
+
   return (
     <View style={isFocusVisible ? { borderWidth: 2 } : {}}>
-      <AriaInputWrapper {...inputProps} {...focusProps} autoFocus={autoFocus}>
+      <AriaInputWrapper
+        {...inputProps}
+        {...focusProps}
+        autoFocus={props.autoFocus}
+      >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <MaterialCommunityIcons size={30} color={'green'} name={icon} />
+          <MaterialCommunityIcons size={30} color={iconColor} name={icon} />
           {props.children}
         </View>
       </AriaInputWrapper>
