@@ -15,6 +15,7 @@ import {
   useOption,
   useSelect,
   useHover,
+  useOverlayPosition,
 } from 'react-native-aria';
 import {
   Animated,
@@ -32,28 +33,21 @@ export function Select(props: AriaSelectOptions) {
 
   let ref = React.useRef();
   let layoutRef = React.useRef();
+  let overlayRef = React.useRef();
+
   let { labelProps, triggerProps, valueProps, menuProps } = useSelect(
     props,
     state,
     ref
   );
 
-  const [positions, setPositions] = useState({
-    top: 0,
-    left: 0,
+  const { overlayProps: positionProps } = useOverlayPosition({
+    placement: 'bottom',
+    targetRef: ref,
+    overlayRef,
+    isOpen: state.isOpen,
+    offset: 10,
   });
-
-  const onLayout = () => {
-    layoutRef.current.measure((...args) => {
-      setPositions({
-        top:
-          Platform.OS === 'web'
-            ? args[args.length - 1] + args[3] + 10
-            : args[args.length - 1] + 10,
-        left: args[args.length - 2],
-      });
-    });
-  };
 
   let { buttonProps } = useButton(triggerProps, ref);
 
@@ -68,7 +62,7 @@ export function Select(props: AriaSelectOptions) {
         label={props.label}
         name={props.name}
       />
-      <View onLayout={onLayout} ref={layoutRef}>
+      <View ref={layoutRef}>
         <AriaButton {...buttonProps} ref={ref}>
           <View
             style={{
@@ -78,16 +72,18 @@ export function Select(props: AriaSelectOptions) {
               fontSize: 14,
               paddingHorizontal: 15,
               width: 250,
-              paddingVertical: 6,
               borderWidth: 1,
               borderRadius: 5,
+              paddingVertical: 5,
             }}
           >
-            <Text {...valueProps}>
-              {state.selectedItem
-                ? state.selectedItem.rendered
-                : 'Choose your favorite color'}
-            </Text>
+            <View {...valueProps}>
+              {state.selectedItem ? (
+                state.selectedItem.rendered
+              ) : (
+                <Text>Choose your favorite color</Text>
+              )}
+            </View>
             <View aria-hidden="true" style={{ paddingLeft: 5 }}>
               {state.isOpen ? (
                 <MaterialIcons
@@ -115,14 +111,16 @@ export function Select(props: AriaSelectOptions) {
         >
           <View style={StyleSheet.absoluteFill}></View>
         </TouchableWithoutFeedback>
-        <View
+        <AriaView
           style={{
             position: 'absolute',
-            ...positions,
+            ...positionProps.style,
+            backgroundColor: 'white',
           }}
+          ref={overlayRef}
         >
           <ListBoxPopup {...menuProps} state={state} />
-        </View>
+        </AriaView>
       </Modal>
     </View>
   );

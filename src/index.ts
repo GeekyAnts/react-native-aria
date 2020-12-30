@@ -7,3 +7,4 @@ export * from './switch';
 export * from './select';
 export * from './utils';
 export * from './listbox';
+export * from './overlays';

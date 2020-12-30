@@ -1,10 +1,10 @@
 import React from 'react';
-import { TouchableNativeFeedback } from 'react-native';
+import { Pressable } from 'react-native';
 
-// TODO: Accept elementType prop (Pressable, TouchableOpacity, etc)
+// TODO: Accept elementType prop (Pressable, Pressable, etc)
 export const AriaButton = React.forwardRef(function AriaButton(
   props: any,
   ref
 ) {
-  return <TouchableNativeFeedback {...props} ref={ref} />;
+  return <Pressable {...props} ref={ref} />;
 });
