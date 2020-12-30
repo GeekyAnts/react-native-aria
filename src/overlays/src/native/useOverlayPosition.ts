@@ -1,5 +1,6 @@
 import type { PlacementAxis } from '@react-types/overlays';
 import React, { RefObject } from 'react';
+import type { Axis, SizeAxis } from '@react-types/overlays';
 import {
   I18nManager,
   //@ts-ignore
@@ -8,7 +9,14 @@ import {
 } from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
 import { APPROX_STATUSBAR_HEIGHT } from '../../../utils';
-
+interface ParsedPlacement {
+  placement: PlacementAxis;
+  crossPlacement: PlacementAxis;
+  axis: Axis;
+  crossAxis: Axis;
+  size: SizeAxis;
+  crossSize: SizeAxis;
+}
 interface AriaPositionProps extends PositionProps {
   /**
    * Element that that serves as the positioning boundary.
@@ -50,6 +58,8 @@ export function useOverlayPosition(props: AriaPositionProps) {
     overlayRef,
     placement = 'bottom' as Placement,
     offset = 0,
+    crossOffset = 0,
+    shouldFlip = true,
   } = props;
 
   const [elementStyles, setElementStyle] = React.useState({
@@ -69,7 +79,7 @@ export function useOverlayPosition(props: AriaPositionProps) {
     height: 0,
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     function setInitialOffsets() {
       if (targetRef && targetRef.current) {
         targetRef.current.measureInWindow(
@@ -88,50 +98,73 @@ export function useOverlayPosition(props: AriaPositionProps) {
     }
 
     // Sometimes returned values are 0, 0 so calling it here instead of using setTimeout
-    requestAnimationFrame(setInitialOffsets);
+    if (props.isOpen) {
+      requestAnimationFrame(setInitialOffsets);
+    } else {
+      setElementStyle({ ...elementStyles, opacity: 0 });
+    }
   }, [targetRef, overlayRef, props.isOpen]);
+
+  // let overlayPosition = React.useMemo(
+  //   () =>
+  //     getPositions({
+  //       placementInfo: translateRTL(placement),
+  //       mainAxisOffset: offset,
+  //       elementOffset: elementStyles,
+  //       triggerElementOffset,
+  //     }),
+  //   [triggerElementOffset, elementStyles, placement, offset]
+  // );
 
   let overlayPosition = React.useMemo(
     () =>
-      getPositions({
-        placementInfo: translateRTL(placement),
-        mainAxisOffset: offset,
-        elementOffset: elementStyles,
-        triggerElementOffset,
+      calculatePositions({
+        placement,
+        targetNode: triggerElementOffset,
+        overlayNode: elementStyles,
+        scrollNode: {
+          top: 0,
+          left: 0,
+          width: windowWidth,
+          height: windowHeight,
+        },
+        padding: 0,
+        shouldFlip,
+        boundaryElement: {
+          top: 0,
+          left: 0,
+          width: windowWidth,
+          height: windowHeight,
+        },
+        offset,
+        crossOffset,
       }),
-    [triggerElementOffset, elementStyles, placement, offset]
+    [
+      triggerElementOffset,
+      elementStyles,
+      placement,
+      offset,
+      shouldFlip,
+      windowHeight,
+      windowWidth,
+      crossOffset,
+    ]
   );
-
-  // If popover colliding with bottom of window
-  if (overlayPosition.top + elementStyles.height > windowHeight) {
-    overlayPosition.top = windowHeight - elementStyles.height - INDENTS.default;
-  }
-
-  // If popover colliding with top of window
-  if (overlayPosition.top < 0) {
-    overlayPosition.top = INDENTS.top;
-  }
-
-  // If popover colliding with right side of window
-  if (overlayPosition.left + elementStyles.width > windowWidth) {
-    overlayPosition.left = windowWidth - elementStyles.width - INDENTS.default;
-  }
-
-  // If popover colliding with left side of window
-  if (overlayPosition.left < 0) {
-    overlayPosition.left = INDENTS.default;
-  }
 
   return {
     overlayProps: {
       style: {
-        ...overlayPosition,
+        ...overlayPosition.position,
+        maxHeight: overlayPosition.maxHeight,
         opacity: elementStyles.opacity,
       },
     },
-    placement: placement,
+    placement: overlayPosition.placement,
     arrowProps: {
-      style: {},
+      style: {
+        left: overlayPosition.arrowOffsetLeft,
+        top: overlayPosition.arrowOffsetTop,
+      },
     },
     updatePosition: () => {},
   };
@@ -256,3 +289,322 @@ const getPositions = ({
 
   return positions;
 };
+
+const calculatePositions = (opts: any) => {
+  let {
+    placement,
+    targetNode,
+    overlayNode,
+    scrollNode,
+    padding,
+    shouldFlip,
+    boundaryElement,
+    offset,
+    crossOffset,
+  } = opts;
+  let container = overlayNode;
+
+  let childOffset: Offset = targetNode;
+  let isContainerPositioned = false;
+  let overlaySize: Offset = overlayNode;
+  let margins = { top: 0, bottom: 0, left: 0, right: 0 };
+  let scrollSize = scrollNode;
+  // let boundaryDimensions = boundaryElement;
+  let boundaryDimensions = boundaryElement;
+
+  let containerOffsetWithBoundary: Offset = overlayNode;
+
+  return calculatePositionInternal(
+    placement,
+    childOffset,
+    overlaySize,
+    scrollSize,
+    margins,
+    padding,
+    shouldFlip,
+    boundaryDimensions,
+    containerOffsetWithBoundary,
+    offset,
+    crossOffset,
+    isContainerPositioned
+  );
+};
+
+function calculatePositionInternal(
+  placementInput: Placement,
+  childOffset: any,
+  overlaySize: Offset,
+  scrollSize: Offset,
+  margins: Position,
+  padding: number,
+  flip: boolean,
+  boundaryDimensions: Dimensions,
+  containerOffsetWithBoundary: Offset,
+  offset: number,
+  crossOffset: number,
+  isContainerPositioned: boolean
+): PositionResult {
+  let placementInfo = parsePlacement(placementInput);
+  let {
+    size,
+    crossAxis,
+    crossSize,
+    placement,
+    crossPlacement,
+    axis,
+  } = placementInfo;
+  let position = computePosition(
+    childOffset,
+    boundaryDimensions,
+    overlaySize,
+    placementInfo,
+    offset,
+    crossOffset,
+    containerOffsetWithBoundary,
+    isContainerPositioned
+  );
+
+  let space = getAvailableSpace(
+    boundaryDimensions,
+    containerOffsetWithBoundary,
+    childOffset,
+    margins,
+    padding + offset,
+    placementInfo
+  );
+
+  if (flip && overlaySize[size] > space) {
+    let flippedPlacementInfo = parsePlacement(
+      `${FLIPPED_DIRECTION[placement]} ${crossPlacement}` as Placement
+    );
+    let flippedPosition = computePosition(
+      childOffset,
+      boundaryDimensions,
+      overlaySize,
+      flippedPlacementInfo,
+      offset,
+      crossOffset,
+      containerOffsetWithBoundary,
+      isContainerPositioned
+    );
+    let flippedSpace = getAvailableSpace(
+      boundaryDimensions,
+      containerOffsetWithBoundary,
+      childOffset,
+      margins,
+      padding + offset,
+      flippedPlacementInfo
+    );
+
+    // If the available space for the flipped position is greater than the original available space, flip.
+    if (flippedSpace > space) {
+      placementInfo = flippedPlacementInfo;
+      position = flippedPosition;
+    }
+  }
+  console.log(
+    'hey man 1',
+    size,
+    position[axis],
+    boundaryDimensions[size] - containerOffsetWithBoundary[size]
+  );
+
+  // Check collisions with edges - Worst case scenerio
+
+  // If popover colliding with right side of window
+  position.left = Math.min(
+    position.left,
+    boundaryDimensions.width - containerOffsetWithBoundary.width
+  );
+
+  // If popover colliding with bottom of window
+  position.top = Math.min(
+    position.top,
+    boundaryDimensions.height - containerOffsetWithBoundary.height
+  );
+
+  // If popover colliding with top of window
+  position.top = Math.max(position.top, 0);
+
+  // If popover colliding with left side of window
+  position.left = Math.max(position.left, 0);
+
+  let arrowPosition: Position = {};
+  arrowPosition[crossAxis] =
+    childOffset[crossAxis] - position[crossAxis] + childOffset[crossSize] / 2;
+
+  return {
+    position,
+    arrowOffsetLeft: arrowPosition.left,
+    arrowOffsetTop: arrowPosition.top,
+    placement: placementInfo.placement,
+  };
+}
+
+function computePosition(
+  childOffset: any,
+  boundaryDimensions: Dimensions,
+  overlaySize: Offset,
+  placementInfo: ParsedPlacement,
+  offset: number,
+  crossOffset: number,
+  containerOffsetWithBoundary: Offset,
+  isContainerPositioned: boolean
+) {
+  let {
+    placement,
+    crossPlacement,
+    axis,
+    crossAxis,
+    size,
+    crossSize,
+  } = placementInfo;
+  let position: any = {};
+  //@ts-ignore
+  position[crossAxis] = childOffset[crossAxis];
+
+  if (crossPlacement === 'center') {
+    position[crossAxis] +=
+      (childOffset[crossSize] - overlaySize[crossSize]) / 2;
+  } else if (crossPlacement !== crossAxis) {
+    position[crossAxis] += childOffset[crossSize] - overlaySize[crossSize];
+  }
+
+  position[crossAxis] += crossOffset;
+
+  // this is button center position - the overlay size + half of the button to align bottom of overlay with button center
+  let minViablePosition =
+    childOffset[crossAxis] +
+    childOffset[crossSize] / 2 -
+    overlaySize[crossSize];
+  // this is button position of center, aligns top of overlay with button center
+  let maxViablePosition = childOffset[crossAxis] + childOffset[crossSize] / 2;
+
+  // clamp it into the range of the min/max positions
+  position[crossAxis] = Math.min(
+    Math.max(minViablePosition, position[crossAxis]),
+    maxViablePosition
+  );
+
+  if (placement === axis) {
+    const containerHeight = containerOffsetWithBoundary[size];
+    position[axis] = Math.floor(childOffset[axis] - containerHeight - offset);
+  } else {
+    position[axis] = Math.floor(childOffset[axis] + childOffset[size] + offset);
+  }
+
+  return position;
+}
+
+function getAvailableSpace(
+  boundaryDimensions: Dimensions,
+  containerOffsetWithBoundary: Offset,
+  childOffset: any,
+  margins: Position,
+  padding: number,
+  placementInfo: ParsedPlacement
+) {
+  let { placement, axis, size } = placementInfo;
+  if (placement === axis) {
+    return Math.max(0, childOffset[axis] - padding);
+  }
+
+  return Math.max(
+    0,
+    boundaryDimensions[size] - childOffset[axis] - childOffset[size] - padding
+  );
+}
+
+const AXIS = {
+  top: 'top',
+  bottom: 'top',
+  left: 'left',
+  right: 'left',
+};
+
+const FLIPPED_DIRECTION = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+};
+
+const CROSS_AXIS = {
+  top: 'left',
+  left: 'top',
+};
+
+const AXIS_SIZE = {
+  top: 'height',
+  left: 'width',
+};
+
+interface Position {
+  top?: number;
+  left?: number;
+  bottom?: number;
+  right?: number;
+}
+
+interface Dimensions {
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  scroll: Position;
+}
+
+interface Offset {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+interface PositionOpts {
+  placement: Placement;
+  targetNode: HTMLElement;
+  overlayNode: HTMLElement;
+  scrollNode: HTMLElement;
+  padding: number;
+  shouldFlip: boolean;
+  boundaryElement: HTMLElement;
+  offset: number;
+  crossOffset: number;
+}
+
+export interface PositionResult {
+  position?: Position;
+  arrowOffsetLeft?: number;
+  arrowOffsetTop?: number;
+  maxHeight?: number;
+  placement: PlacementAxis;
+}
+
+const PARSED_PLACEMENT_CACHE: any = {};
+
+function parsePlacement(input: Placement): ParsedPlacement {
+  if (PARSED_PLACEMENT_CACHE[input]) {
+    return PARSED_PLACEMENT_CACHE[input];
+  }
+
+  let [placement, crossPlacement] = input.split(' ');
+  let axis: Axis = AXIS[placement] || 'right';
+  let crossAxis: Axis = CROSS_AXIS[axis];
+
+  if (!AXIS[crossPlacement]) {
+    crossPlacement = 'center';
+  }
+
+  let size = AXIS_SIZE[axis];
+  let crossSize = AXIS_SIZE[crossAxis];
+  PARSED_PLACEMENT_CACHE[input] = {
+    placement,
+    crossPlacement,
+    axis,
+    crossAxis,
+    size,
+    crossSize,
+  };
+  return PARSED_PLACEMENT_CACHE[input];
+}

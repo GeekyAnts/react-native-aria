@@ -33,6 +33,7 @@ const Popover = React.forwardRef(
             backgroundColor: 'pink',
             color: 'black',
             padding: 10,
+            position: 'absolute',
             ...positionProps.style,
           }}
         >
@@ -66,8 +67,10 @@ export function PopoverExample() {
     overlayRef,
     isOpen: state.isOpen,
     offset: 10,
+    crossOffset: 10,
+    placement: 'top left',
   });
-
+  console.log({ arrowProps });
   // popover closes.
   let { buttonProps } = useButton(
     {
@@ -98,7 +101,7 @@ export function PopoverExample() {
           {...overlayProps}
           positionProps={positionProps}
         >
-          <Text>This is the content of the popover.</Text>
+          <Text>This is the content of the popover. xyz abchdh</Text>
         </Popover>
       </Modal>
     </>

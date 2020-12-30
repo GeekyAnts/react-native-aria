@@ -40,12 +40,15 @@ export default function App() {
       <RadioExample /> */}
 
       {/* <SwitchExample /> */}
-      <SafeAreaView style={{ marginTop: 0 }}>
-        <SelectExample />
-      </SafeAreaView>
-      {/* <View>
-        <PopoverExample />
-      </View> */}
+      <SafeAreaView>{/* <SelectExample /> */}</SafeAreaView>
+      {/* <ScrollView horizontal>
+        <View style={{ marginLeft: 350, width: 1000 }}>
+          <View style={{ maxWidth: 100 }}> */}
+      <PopoverExample />
+      {/* </View>
+        </View> */}
+      {/* <View style={{ height: 10 }}></View> */}
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
