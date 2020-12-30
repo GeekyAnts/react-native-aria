@@ -8,4 +8,6 @@ export const getLabel = (props: any) => {
   return label;
 };
 
+export * from './approxStatusBarHeight';
+
 export * from './AriaView';

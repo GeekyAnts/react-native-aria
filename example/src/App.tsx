@@ -19,7 +19,7 @@ export default function App() {
         flex: 1,
       }}
     >
-      <Text>Button with hover and focus visible example</Text>
+      {/* <Text>Button with hover and focus visible example</Text>
       <View style={{ marginVertical: 10, marginBottom: 40 }}>
         <Button>
           <Text style={{ color: 'white' }}>Test</Text>
@@ -37,12 +37,12 @@ export default function App() {
       </View>
       <CheckboxExample />
 
-      <RadioExample />
+      <RadioExample /> */}
 
-      <SwitchExample />
-      <View style={{ marginTop: 100 }}>
+      {/* <SwitchExample /> */}
+      <SafeAreaView style={{ marginTop: 0 }}>
         <SelectExample />
-      </View>
+      </SafeAreaView>
       {/* <View>
         <PopoverExample />
       </View> */}

@@ -1,7 +1,13 @@
 import type { PlacementAxis } from '@react-types/overlays';
 import React, { RefObject } from 'react';
-import { I18nManager, Dimensions, View } from 'react-native';
+import {
+  I18nManager,
+  //@ts-ignore
+  Dimensions,
+  View,
+} from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
+import { APPROX_STATUSBAR_HEIGHT } from '../../../utils';
 
 interface AriaPositionProps extends PositionProps {
   /**
@@ -31,6 +37,11 @@ interface AriaPositionProps extends PositionProps {
   onClose?: () => void;
 }
 
+const INDENTS = {
+  top: APPROX_STATUSBAR_HEIGHT ?? 0,
+  default: 8,
+};
+
 export function useOverlayPosition(props: AriaPositionProps) {
   const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
@@ -38,7 +49,6 @@ export function useOverlayPosition(props: AriaPositionProps) {
     targetRef,
     overlayRef,
     placement = 'bottom' as Placement,
-    shouldFlip = true,
     offset = 0,
   } = props;
 
@@ -94,22 +104,22 @@ export function useOverlayPosition(props: AriaPositionProps) {
 
   // If popover colliding with bottom of window
   if (overlayPosition.top + elementStyles.height > windowHeight) {
-    overlayPosition.top = windowHeight - elementStyles.height;
+    overlayPosition.top = windowHeight - elementStyles.height - INDENTS.default;
   }
 
   // If popover colliding with top of window
   if (overlayPosition.top < 0) {
-    overlayPosition.top = 0;
+    overlayPosition.top = INDENTS.top;
   }
 
   // If popover colliding with right side of window
   if (overlayPosition.left + elementStyles.width > windowWidth) {
-    overlayPosition.left = windowWidth - elementStyles.width;
+    overlayPosition.left = windowWidth - elementStyles.width - INDENTS.default;
   }
 
   // If popover colliding with left side of window
   if (overlayPosition.left < 0) {
-    overlayPosition.left = 0;
+    overlayPosition.left = INDENTS.default;
   }
 
   return {
