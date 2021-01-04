@@ -44,8 +44,6 @@ const Popover = React.forwardRef(
     },
     ref
   ) => {
-    console.log({ positionProps });
-
     const direction = arrowPlacement[placement];
     const defaultStyle = {
       top: {
@@ -134,7 +132,7 @@ export function PopoverExample() {
     overlayRef,
     isOpen: state.isOpen,
     offset: arrowDimensions.size,
-    placement: 'top ',
+    placement: 'top',
   });
   console.log({ arrowProps, placement });
   // popover closes.
