@@ -3,8 +3,6 @@ import { useListState } from '@react-stately/list';
 import { Item } from '@react-stately/collections';
 import { mergeProps } from '@react-aria/utils';
 import {
-  Li,
-  Ul,
   AriaView,
   useListBox,
   useOption,
@@ -20,8 +18,6 @@ function ListBox(props) {
   // Get props for the listbox element
   let ref = React.useRef();
   let { listBoxProps, labelProps } = useListBox(props, state, ref);
-
-  console.log('hey man ', listBoxProps);
 
   return (
     <>
@@ -62,12 +58,9 @@ function Option({ item, state }) {
     ref
   );
 
-  console.log('hey man ', optionProps);
-
   // Determine whether we should show a keyboard
   // focus ring for accessibility
   let { isFocusVisible, focusProps } = useFocusRing();
-  console.log('hahaha  ', isSelected);
   return (
     <AriaButton {...mergeProps(optionProps, focusProps)} ref={ref}>
       <View

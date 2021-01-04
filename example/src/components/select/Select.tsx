@@ -16,6 +16,7 @@ import {
   useSelect,
   useHover,
   useOverlayPosition,
+  Label,
 } from 'react-native-aria';
 import {
   Animated,
@@ -52,9 +53,11 @@ export function Select(props: AriaSelectOptions) {
   let { buttonProps } = useButton(triggerProps, ref);
 
   return (
-    <View style={{ position: 'relative' }}>
-      <View style={{ marginBottom: 10 }}>
-        <Text {...labelProps}>{props.label}</Text>
+    <View style={{ alignSelf: 'center' }}>
+      <View>
+        <Label {...labelProps} nativeID={labelProps.id}>
+          {props.label}
+        </Label>
       </View>
       <HiddenSelect
         state={state}
@@ -63,7 +66,7 @@ export function Select(props: AriaSelectOptions) {
         name={props.name}
       />
       <View ref={layoutRef}>
-        <AriaButton {...buttonProps} ref={ref}>
+        <AriaButton {...buttonProps} ref={ref} nativeID={buttonProps.id}>
           <View
             style={{
               flexDirection: 'row',

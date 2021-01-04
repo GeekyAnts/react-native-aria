@@ -1851,6 +1851,13 @@
     "@react-aria/utils" "^3.3.0"
     clsx "^1.1.1"
 
+"@react-native-async-storage/async-storage@^1.13.2":
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.2.tgz#649f78527f16cd5a87071a888219ef7a35ef5c79"
+  integrity sha512-isTDvUApRJPVWFxV15yrQSOGqarX7cIedq/y4N5yWSnotf68D9qvDEv1I7rCXhkBDi0u4OJt6GA9dksUT0D3wg==
+  dependencies:
+    deep-assign "^3.0.0"
+
 "@react-native-community/bob@^0.17.1":
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/bob/-/bob-0.17.1.tgz#72d71747208e6cf534f14ee7e5a0d39562f6d768"

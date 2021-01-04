@@ -1,4 +1,5 @@
 import { configure, getStorybookUI } from '@storybook/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 configure(() => {
   // Since require.context doesn't exist in metro bundler world, we have to
@@ -6,4 +7,4 @@ configure(() => {
   require('./stories');
 }, module);
 
-export default getStorybookUI();
+export default getStorybookUI({ asyncStorage: AsyncStorage });

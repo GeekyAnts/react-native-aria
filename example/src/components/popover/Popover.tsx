@@ -144,14 +144,17 @@ export function PopoverExample() {
   );
 
   return (
-    <>
-      <AriaButton
-        {...buttonProps}
-        {...triggerProps}
-        ref={triggerRef}
-        style={{ backgroundColor: 'pink' }}
-      >
-        <Text>Open Popover</Text>
+    <View style={{ alignSelf: 'center' }}>
+      <AriaButton {...buttonProps} {...triggerProps} ref={triggerRef}>
+        <View
+          style={{
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            backgroundColor: 'pink',
+          }}
+        >
+          <Text>Open Popover</Text>
+        </View>
       </AriaButton>
       <Modal visible={state.isOpen} onRequestClose={state.close} transparent>
         <TouchableWithoutFeedback onPress={state.close}>
@@ -170,7 +173,7 @@ export function PopoverExample() {
           <Text>This is the content of the popover. xyz abchdh</Text>
         </Popover>
       </Modal>
-    </>
+    </View>
   );
 }
 
