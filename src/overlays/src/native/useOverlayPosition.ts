@@ -50,7 +50,9 @@ const INDENTS = {
   default: 8,
 };
 
-export function useOverlayPosition(props: AriaPositionProps) {
+export function useOverlayPosition(
+  props: AriaPositionProps & { preventCollision?: boolean }
+) {
   const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
   let {
@@ -60,6 +62,7 @@ export function useOverlayPosition(props: AriaPositionProps) {
     offset = 0,
     crossOffset = 0,
     shouldFlip = true,
+    preventCollision = true,
   } = props;
 
   const [elementStyles, setElementStyle] = React.useState({
@@ -138,6 +141,7 @@ export function useOverlayPosition(props: AriaPositionProps) {
         },
         offset,
         crossOffset,
+        preventCollision,
       }),
     [
       triggerElementOffset,
@@ -301,6 +305,7 @@ const calculatePositions = (opts: any) => {
     boundaryElement,
     offset,
     crossOffset,
+    preventCollision,
   } = opts;
   let container = overlayNode;
 
@@ -326,7 +331,8 @@ const calculatePositions = (opts: any) => {
     containerOffsetWithBoundary,
     offset,
     crossOffset,
-    isContainerPositioned
+    isContainerPositioned,
+    preventCollision
   );
 };
 
@@ -342,7 +348,8 @@ function calculatePositionInternal(
   containerOffsetWithBoundary: Offset,
   offset: number,
   crossOffset: number,
-  isContainerPositioned: boolean
+  isContainerPositioned: boolean,
+  preventCollision: boolean
 ): PositionResult {
   let placementInfo = parsePlacement(placementInput);
   let {
@@ -402,32 +409,28 @@ function calculatePositionInternal(
       position = flippedPosition;
     }
   }
-  console.log(
-    'hey man 1',
-    size,
-    position[axis],
-    boundaryDimensions[size] - containerOffsetWithBoundary[size]
-  );
 
-  // Check collisions with edges - Worst case scenerio
+  if (preventCollision) {
+    // Check collisions with edges - Worst case scenerio
 
-  // If popover colliding with right side of window
-  position.left = Math.min(
-    position.left,
-    boundaryDimensions.width - containerOffsetWithBoundary.width
-  );
+    // If popover colliding with right side of window
+    position.left = Math.min(
+      position.left,
+      boundaryDimensions.width - containerOffsetWithBoundary.width
+    );
 
-  // If popover colliding with bottom of window
-  position.top = Math.min(
-    position.top,
-    boundaryDimensions.height - containerOffsetWithBoundary.height
-  );
+    // If popover colliding with bottom of window
+    position.top = Math.min(
+      position.top,
+      boundaryDimensions.height - containerOffsetWithBoundary.height
+    );
 
-  // If popover colliding with top of window
-  position.top = Math.max(position.top, 0);
+    // If popover colliding with top of window
+    position.top = Math.max(position.top, 0);
 
-  // If popover colliding with left side of window
-  position.left = Math.max(position.left, 0);
+    // If popover colliding with left side of window
+    position.left = Math.max(position.left, 0);
+  }
 
   let arrowPosition: Position = {};
   arrowPosition[crossAxis] =

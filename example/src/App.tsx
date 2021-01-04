@@ -41,12 +41,10 @@ export default function App() {
 
       {/* <SwitchExample /> */}
       <SafeAreaView>{/* <SelectExample /> */}</SafeAreaView>
-      {/* <ScrollView horizontal>
-        <View style={{ marginLeft: 350, width: 1000 }}>
-          <View style={{ maxWidth: 100 }}> */}
-      <PopoverExample />
-      {/* </View>
-        </View> */}
+      {/* {/* <ScrollView horizontal> */}
+      <View style={{ marginTop: 150 }}>
+        <PopoverExample />
+      </View>
       {/* <View style={{ height: 10 }}></View> */}
       {/* </ScrollView> */}
     </SafeAreaView>
