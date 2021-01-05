@@ -3,7 +3,6 @@ import React from 'react';
 import { useMenuTriggerState } from '@react-stately/menu';
 import { useTreeState } from '@react-stately/tree';
 import { mergeProps } from '@react-aria/utils';
-// import { useOverlay, DismissButton } from '@react-aria/overlays';
 import {
   AriaView,
   AriaButton,
@@ -62,13 +61,7 @@ export function MenuButton(props) {
         </View>
       </AriaButton>
       <Modal visible={state.isOpen} onRequestClose={state.close} transparent>
-        <TouchableWithoutFeedback
-          onPress={state.close}
-          accessible={false}
-          importantForAccessibility={'no-hide-descendants'}
-        >
-          <View style={StyleSheet.absoluteFill}></View>
-        </TouchableWithoutFeedback>
+        <CloseButton onClose={state.close} />
         <AriaView
           style={{
             position: 'absolute',
@@ -86,6 +79,25 @@ export function MenuButton(props) {
       </Modal>
     </View>
   );
+}
+
+function CloseButton(props) {
+  const [mount, setMount] = React.useState(false);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setMount(true);
+    }, 500);
+  }, []);
+  return mount ? (
+    <TouchableWithoutFeedback
+      onPress={props.onClose}
+      accessible={false}
+      importantForAccessibility={'no-hide-descendants'}
+    >
+      <View style={StyleSheet.absoluteFill}></View>
+    </TouchableWithoutFeedback>
+  ) : null;
 }
 
 function MenuPopup(props) {

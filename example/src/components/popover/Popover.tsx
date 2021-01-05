@@ -142,8 +142,6 @@ export function PopoverExample() {
     triggerRef
   );
 
-  console.log('overlay props ', overlayProps);
-
   return (
     <View style={{ alignSelf: 'center' }}>
       <AriaButton {...buttonProps} {...triggerProps} ref={triggerRef}>
