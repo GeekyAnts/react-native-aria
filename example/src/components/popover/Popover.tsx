@@ -132,9 +132,8 @@ export function PopoverExample() {
     overlayRef,
     isOpen: state.isOpen,
     offset: arrowDimensions.size,
-    placement: 'top',
+    placement: 'bottom',
   });
-  console.log({ arrowProps, placement });
   // popover closes.
   let { buttonProps } = useButton(
     {
@@ -142,6 +141,8 @@ export function PopoverExample() {
     },
     triggerRef
   );
+
+  console.log('overlay props ', overlayProps);
 
   return (
     <View style={{ alignSelf: 'center' }}>
@@ -153,10 +154,16 @@ export function PopoverExample() {
             backgroundColor: 'pink',
           }}
         >
-          <Text>Open Popover</Text>
+          <Text>+</Text>
         </View>
       </AriaButton>
-      <Modal visible={state.isOpen} onRequestClose={state.close} transparent>
+      <Modal
+        visible={state.isOpen}
+        onRequestClose={() => {
+          state.close();
+        }}
+        transparent
+      >
         <TouchableWithoutFeedback onPress={state.close}>
           <View style={StyleSheet.absoluteFill}></View>
         </TouchableWithoutFeedback>

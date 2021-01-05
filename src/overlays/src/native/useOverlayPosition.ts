@@ -122,7 +122,7 @@ export function useOverlayPosition(
   let overlayPosition = React.useMemo(
     () =>
       calculatePositions({
-        placement,
+        placement: translateRTL(placement),
         targetNode: triggerElementOffset,
         overlayNode: elementStyles,
         scrollNode: {
