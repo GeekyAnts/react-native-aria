@@ -44,14 +44,19 @@ export function MenuButton(props) {
 
   return (
     <View style={{ alignSelf: 'center' }}>
-      <AriaButton {...buttonProps} ref={ref}>
+      <AriaButton
+        {...buttonProps}
+        ref={ref}
+        accessibilityLabel="Click here to perform some actions"
+      >
         <View
           style={{
             fontSize: 14,
             flexDirection: 'row',
-            width: 100,
             borderWidth: 1,
             justifyContent: 'space-around',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
           }}
         >
           <Text>{props.label}</Text>
@@ -114,7 +119,6 @@ function MenuPopup(props) {
         <View
           style={{
             backgroundColor: 'lightgray',
-            width: 100,
           }}
         >
           {[...state.collection].map((item) => (
@@ -153,7 +157,13 @@ export function MenuItem({ item, state, onAction, onClose }) {
 
   return (
     <AriaButton {...mergeProps(menuItemProps, focusProps)} ref={ref}>
-      <View>
+      <View
+        style={{
+          paddingVertical: 10,
+          paddingHorizontal: 20,
+          backgroundColor: isFocused ? 'darkgray' : null,
+        }}
+      >
         <Text>{item.rendered}</Text>
       </View>
     </AriaButton>

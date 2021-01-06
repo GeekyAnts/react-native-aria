@@ -149,22 +149,16 @@ export function PopoverExample() {
           style={{
             paddingVertical: 5,
             paddingHorizontal: 10,
-            backgroundColor: 'pink',
+            backgroundColor: 'white',
+            borderWidth: 1,
+            borderColor: 'black',
           }}
         >
-          <Text>+</Text>
+          <Text>More</Text>
         </View>
       </AriaButton>
-      <Modal
-        visible={state.isOpen}
-        onRequestClose={() => {
-          state.close();
-        }}
-        transparent
-      >
-        <TouchableWithoutFeedback onPress={state.close}>
-          <View style={StyleSheet.absoluteFill}></View>
-        </TouchableWithoutFeedback>
+      <Modal visible={state.isOpen} onRequestClose={state.close} transparent>
+        <CloseButton onClose={state.close} />
         <Popover
           ref={overlayRef}
           title="Popover title"
@@ -175,7 +169,7 @@ export function PopoverExample() {
           arrowProps={arrowProps}
           positionProps={positionProps}
         >
-          <Text>This is the content of the popover. xyz abchdh</Text>
+          <Text>This is the content of the popover. </Text>
         </Popover>
       </Modal>
     </View>
@@ -240,4 +234,23 @@ function Arrow(props) {
       <Path d={pathData.join(' ')} />
     </Svg>
   );
+}
+
+function CloseButton(props) {
+  const [mount, setMount] = React.useState(false);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setMount(true);
+    }, 500);
+  }, []);
+  return mount ? (
+    <TouchableWithoutFeedback
+      onPress={props.onClose}
+      accessible={false}
+      importantForAccessibility={'no-hide-descendants'}
+    >
+      <View style={StyleSheet.absoluteFill}></View>
+    </TouchableWithoutFeedback>
+  ) : null;
 }

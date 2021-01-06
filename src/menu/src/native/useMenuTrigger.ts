@@ -10,12 +10,10 @@
  * governing permissions and limitations under the License.
  */
 
-import type { AriaButtonProps } from '@react-types/button';
-import type { HTMLAttributes, RefObject } from 'react';
+import type { RefObject } from 'react';
 import type { MenuTriggerState } from '@react-stately/menu';
 import { useId } from '@react-aria/utils';
-import { useOverlayTrigger } from '@react-aria/overlays';
-import { Alert } from 'react-native';
+import type { AccessibilityProps, PressableProps } from 'react-native';
 
 interface MenuTriggerAriaProps {
   /** The type of menu that the menu trigger opens. */
@@ -24,10 +22,10 @@ interface MenuTriggerAriaProps {
 
 interface MenuTriggerAria {
   /** Props for the menu trigger element. */
-  menuTriggerProps: AriaButtonProps;
+  menuTriggerProps: PressableProps;
 
   /** Props for the menu. */
-  menuProps: HTMLAttributes<HTMLElement>;
+  menuProps: AccessibilityProps;
 }
 
 /**
@@ -50,9 +48,10 @@ export function useMenuTrigger(
       onPress(e) {
         state.toggle();
       },
+      accessibilityState: {
+        expanded: state.isOpen,
+      },
     },
-    menuProps: {
-      'aria-labelledby': menuTriggerId,
-    },
+    menuProps: {},
   };
 }

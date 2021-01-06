@@ -10,16 +10,15 @@
  * governing permissions and limitations under the License.
  */
 
-import { AriaMenuProps } from '@react-types/menu';
-import { filterDOMProps, mergeProps } from '@react-aria/utils';
-import { HTMLAttributes, RefObject } from 'react';
-import { KeyboardDelegate } from '@react-types/shared';
-import { TreeState } from '@react-stately/tree';
-import { useSelectableList } from '@react-aria/selection';
+import type { AriaMenuProps } from '@react-types/menu';
+import type { RefObject } from 'react';
+import type { KeyboardDelegate } from '@react-types/shared';
+import type { TreeState } from '@react-stately/tree';
+import type { AccessibilityProps } from 'react-native';
 
 interface MenuAria {
   /** Props for the menu element. */
-  menuProps: HTMLAttributes<HTMLElement>;
+  menuProps: AccessibilityProps;
 }
 
 interface AriaMenuOptions<T> extends AriaMenuProps<T> {
@@ -57,7 +56,7 @@ export function useMenu<T>(
       accessibilityState: {
         disabled: isDisabled,
       },
-      disabled: isDisabled,
+      accessibilityRole: 'menu',
     },
   };
 }

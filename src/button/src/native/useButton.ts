@@ -43,6 +43,7 @@ export function useButton(
 
   const mergedProps = mergeProps(pressProps, rest, {
     accessibilityState: {
+      ...rest.accessibilityState,
       disabled: isDisabled,
     },
     disabled: isDisabled,

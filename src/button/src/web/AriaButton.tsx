@@ -1,27 +1,18 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { HTMLAttributes } from 'react';
+import type { AccessibilityProps, ViewStyle } from 'react-native';
 //@ts-ignore
 import { unstable_createElement } from 'react-native-web';
 
-// const ovverrideStyles = {
-//   alignItems: 'stretch',
-//   border: '0 solid black',
-//   boxSizing: 'border-box',
-//   display: 'flex',
-//   flexBasis: 'auto',
-//   flexDirection: 'column',
-//   flexShrink: 0,
-//   margin: 0,
-//   minHeight: 0,
-//   minWidth: 0,
-//   padding: 0,
-//   position: 'relative',
-//   zIndex: 0,
-// };
+type IAriaButtonProps = HTMLAttributes<HTMLButtonElement> &
+  AccessibilityProps & {
+    style: ViewStyle;
+    children?: React.ReactNode;
+  };
 
+// RN Pressable for web does not fully support tabIndex, onKeyDown which is needed by react-aria for keyboard navigation
 // TODO: Accept elementTyp prop (div, span, etc)
 export const AriaButton = React.forwardRef(function AriaButton(
-  props: any,
+  props: IAriaButtonProps,
   ref
 ) {
   let newProps = { ...props };
@@ -31,10 +22,11 @@ export const AriaButton = React.forwardRef(function AriaButton(
 
   return unstable_createElement('div', {
     role: 'button',
+    ...newProps,
     style: {
       cursor: 'pointer',
+      ...newProps.style,
     },
-    ...newProps,
     ref,
   });
 });

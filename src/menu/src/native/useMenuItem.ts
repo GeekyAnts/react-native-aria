@@ -85,12 +85,6 @@ export function useMenuItem<T>(
     role = 'menuitemcheckbox';
   }
 
-  let ariaProps = {
-    'aria-disabled': isDisabled,
-    role,
-    'aria-label': props['aria-label'],
-  };
-
   const { pressProps } = usePress({
     isDisabled,
     onPress: () => {
@@ -102,7 +96,11 @@ export function useMenuItem<T>(
 
   return {
     menuItemProps: {
-      ...ariaProps,
+      accessibilityRole: 'menuitem',
+      accessibilityState: {
+        selected: isSelected,
+        disabled: isDisabled,
+      },
       ...pressProps,
     },
     labelProps: {},

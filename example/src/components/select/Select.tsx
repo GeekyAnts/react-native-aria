@@ -107,13 +107,7 @@ export function Select(props: AriaSelectOptions) {
       </View>
 
       <Modal visible={state.isOpen} onRequestClose={state.toggle} transparent>
-        <TouchableWithoutFeedback
-          onPress={state.toggle}
-          accessible={false}
-          importantForAccessibility={'no-hide-descendants'}
-        >
-          <View style={StyleSheet.absoluteFill}></View>
-        </TouchableWithoutFeedback>
+        <CloseButton onClose={state.close} />
         <AriaView
           style={{
             position: 'absolute',
@@ -232,4 +226,23 @@ function Option({ item, state }) {
       </View>
     </AriaButton>
   );
+}
+
+function CloseButton(props) {
+  const [mount, setMount] = React.useState(false);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setMount(true);
+    }, 500);
+  }, []);
+  return mount ? (
+    <TouchableWithoutFeedback
+      onPress={props.onClose}
+      accessible={false}
+      importantForAccessibility={'no-hide-descendants'}
+    >
+      <View style={StyleSheet.absoluteFill}></View>
+    </TouchableWithoutFeedback>
+  ) : null;
 }
