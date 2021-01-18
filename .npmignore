@@ -1,0 +1,18 @@
+# Dotfiles
+.babelrc
+.eslintignore
+.eslintrc.json
+.gitattributes
+_config.yml
+
+# Documents
+CONTRIBUTING.md
+ISSUE_TEMPLATE.txt
+img
+
+# Test cases
+__tests__
+dist/__tests__
+
+# Example
+example/
