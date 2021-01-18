@@ -55,7 +55,7 @@ export function useSelect<T>(
     }
 
     prev.current = state.isOpen;
-  }, [state.isOpen]);
+  }, [state.isOpen, ref]);
 
   return {
     labelProps: {},

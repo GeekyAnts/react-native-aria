@@ -106,7 +106,7 @@ export function useOverlayPosition(
     } else {
       setElementStyle({ ...elementStyles, opacity: 0 });
     }
-  }, [targetRef, overlayRef, props.isOpen]);
+  }, [targetRef, overlayRef, props.isOpen, elementStyles]);
 
   // let overlayPosition = React.useMemo(
   //   () =>
@@ -152,6 +152,7 @@ export function useOverlayPosition(
       windowHeight,
       windowWidth,
       crossOffset,
+      preventCollision,
     ]
   );
 
@@ -454,8 +455,7 @@ function computePosition(
   offset: number,
   crossOffset: number,
   containerOffsetWithBoundary: Offset,
-  // @ts-ignore
-  isContainerPositioned: boolean
+  isContainerPositioned?: boolean
 ) {
   let {
     placement,
@@ -466,9 +466,8 @@ function computePosition(
     crossSize,
   } = placementInfo;
   let position: any = {};
-  //@ts-ignore
   position[crossAxis] = childOffset[crossAxis];
-
+  console.log(isContainerPositioned);
   if (crossPlacement === 'center') {
     position[crossAxis] +=
       (childOffset[crossSize] - overlaySize[crossSize]) / 2;
