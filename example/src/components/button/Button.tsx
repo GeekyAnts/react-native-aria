@@ -6,9 +6,7 @@ import { useFocusRing } from 'react-native-aria';
 
 export function Button(props: any) {
   let ref = React.useRef<any>();
-
   const springValueRef = useRef(new Animated.Value(1));
-
   const { buttonProps, isPressed } = useUniversalButton(
     {
       ...props,

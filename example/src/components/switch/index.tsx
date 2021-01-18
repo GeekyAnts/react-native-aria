@@ -1,16 +1,7 @@
-/**
- * toggle-switch-react-native
- * Toggle Switch component for react native, it works on iOS and Android
- * https://github.com/aminebenkeroum/toggle-switch-react-native
- * Email:amine.benkeroum@gmail.com
- * Blog: https://medium.com/@aminebenkeroum/
- * @benkeroumamine
- */
-
 import { useToggleState } from '@react-stately/toggle';
 import React, { useRef } from 'react';
 import { StyleSheet, Text, View, Animated, Platform } from 'react-native';
-import { useSwitch, AriaInputWrapper, useFocusRing } from 'react-native-aria';
+import { useSwitch, AriaInputWrapper } from 'react-native-aria';
 
 const calculateDimensions = (size: any) => {
   switch (size) {
@@ -135,7 +126,6 @@ const styles = StyleSheet.create({
 
 export function ControlledSwitch() {
   const state = useToggleState();
-  const { isFocusVisible, focusProps } = useFocusRing();
   const inputRef = useRef(null);
   let { inputProps } = useSwitch(
     { 'aria-label': 'Example switch' },
@@ -144,18 +134,8 @@ export function ControlledSwitch() {
   );
 
   return (
-    <AriaInputWrapper {...inputProps} {...focusProps} ref={inputRef}>
-      <View style={isFocusVisible ? { borderWidth: 2 } : {}}>
-        <Switch
-          isOn={state.isSelected}
-          onColor="green"
-          offColor="red"
-          label={'this is a switch'}
-          labelStyle={{ color: 'black', fontWeight: '900' }}
-          size="large"
-          onToggle={state.toggle}
-        />
-      </View>
+    <AriaInputWrapper {...inputProps} ref={inputRef}>
+      <Switch isOn={state.isSelected} onToggle={state.toggle} />
     </AriaInputWrapper>
   );
 }
