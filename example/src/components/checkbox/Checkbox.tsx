@@ -7,7 +7,7 @@ import {
   useFocusRing,
 } from 'react-native-aria';
 import { useToggleState } from '@react-stately/toggle';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { CheckboxGroupContext } from './CheckboxGroup';
 import type { RNAriaCheckboxProps } from 'src/types';
 
@@ -33,13 +33,13 @@ export function Checkbox(props: RNAriaCheckboxProps) {
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCheckbox(props, useToggleState(props), inputRef);
 
-  let icon = props.isIndeterminate
-    ? 'checkbox-intermediate'
-    : inputProps.checked
-    ? 'checkbox-marked'
-    : 'checkbox-blank-outline';
+  // let icon = props.isIndeterminate
+  //   ? 'checkbox-intermediate'
+  //   : inputProps.checked
+  //   ? 'checkbox-marked'
+  //   : 'checkbox-blank-outline';
 
-  const iconColor = props.isDisabled ? 'gray' : 'green';
+  // const iconColor = props.isDisabled ? 'gray' : 'green';
 
   return (
     <View style={isFocusVisible ? { borderWidth: 2 } : {}}>
@@ -49,7 +49,7 @@ export function Checkbox(props: RNAriaCheckboxProps) {
         autoFocus={props.autoFocus}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <MaterialCommunityIcons size={30} color={iconColor} name={icon} />
+          {/* <MaterialCommunityIcons size={30} color={iconColor} name={icon} /> */}
           {props.children}
         </View>
       </AriaInputWrapper>

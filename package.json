@@ -1,7 +1,7 @@
 {
   "name": "react-native-aria",
   "version": "0.1.0",
-  "description": "Component behaviour hooks for RN",
+  "description": "Component behaviour hooks for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",

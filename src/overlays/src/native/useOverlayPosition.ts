@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
-import { APPROX_STATUSBAR_HEIGHT } from '../../../utils';
+// import { APPROX_STATUSBAR_HEIGHT } from '../../../utils';
 interface ParsedPlacement {
   placement: PlacementAxis;
   crossPlacement: PlacementAxis;
@@ -45,10 +45,10 @@ interface AriaPositionProps extends PositionProps {
   onClose?: () => void;
 }
 
-const INDENTS = {
-  top: APPROX_STATUSBAR_HEIGHT ?? 0,
-  default: 8,
-};
+// const INDENTS = {
+//   top: APPROX_STATUSBAR_HEIGHT ?? 0,
+//   default: 8,
+// };
 
 export function useOverlayPosition(
   props: AriaPositionProps & { preventCollision?: boolean }
@@ -218,81 +218,81 @@ export interface PositionResult {
   placement: PlacementAxis;
 }
 
-const getPositions = ({
-  placementInfo,
-  triggerElementOffset,
-  elementOffset,
-  mainAxisOffset,
-}: {
-  placementInfo: Placement;
-  triggerElementOffset: Offset;
-  elementOffset: Offset;
-  mainAxisOffset: number;
-}): { top: number; left: number } => {
-  let [placement, crossPlacement] = placementInfo.split(' ');
-  let top = 0;
-  let left = 0;
+// const getPositions = ({
+//   placementInfo,
+//   triggerElementOffset,
+//   elementOffset,
+//   mainAxisOffset,
+// }: {
+//   placementInfo: Placement;
+//   triggerElementOffset: Offset;
+//   elementOffset: Offset;
+//   mainAxisOffset: number;
+// }): { top: number; left: number } => {
+//   let [placement, crossPlacement] = placementInfo.split(' ');
+//   let top = 0;
+//   let left = 0;
 
-  if (placement === 'bottom') {
-    top =
-      triggerElementOffset.top + triggerElementOffset.height + mainAxisOffset;
-    let triggerCenter =
-      triggerElementOffset.left + triggerElementOffset.width / 2;
-    left = triggerCenter - elementOffset.width / 2;
+//   if (placement === 'bottom') {
+//     top =
+//       triggerElementOffset.top + triggerElementOffset.height + mainAxisOffset;
+//     let triggerCenter =
+//       triggerElementOffset.left + triggerElementOffset.width / 2;
+//     left = triggerCenter - elementOffset.width / 2;
 
-    if (crossPlacement === 'left') {
-      left = triggerElementOffset.left;
-    } else if (crossPlacement === 'right') {
-      left =
-        triggerElementOffset.left -
-        (elementOffset.width - triggerElementOffset.width);
-    }
-  } else if (placement === 'top') {
-    top = triggerElementOffset.top - elementOffset.height - mainAxisOffset;
-    let triggerCenter =
-      triggerElementOffset.left + triggerElementOffset.width / 2;
-    left = triggerCenter - elementOffset.width / 2;
+//     if (crossPlacement === 'left') {
+//       left = triggerElementOffset.left;
+//     } else if (crossPlacement === 'right') {
+//       left =
+//         triggerElementOffset.left -
+//         (elementOffset.width - triggerElementOffset.width);
+//     }
+//   } else if (placement === 'top') {
+//     top = triggerElementOffset.top - elementOffset.height - mainAxisOffset;
+//     let triggerCenter =
+//       triggerElementOffset.left + triggerElementOffset.width / 2;
+//     left = triggerCenter - elementOffset.width / 2;
 
-    if (crossPlacement === 'left') {
-      left = triggerElementOffset.left;
-    } else if (crossPlacement === 'right') {
-      left =
-        triggerElementOffset.left -
-        (elementOffset.width - triggerElementOffset.width);
-    }
-  } else if (placement === 'left') {
-    left = triggerElementOffset.left - elementOffset.width - mainAxisOffset;
-    let triggerCenter =
-      triggerElementOffset.top + triggerElementOffset.height / 2;
-    top = triggerCenter - elementOffset.height / 2;
+//     if (crossPlacement === 'left') {
+//       left = triggerElementOffset.left;
+//     } else if (crossPlacement === 'right') {
+//       left =
+//         triggerElementOffset.left -
+//         (elementOffset.width - triggerElementOffset.width);
+//     }
+//   } else if (placement === 'left') {
+//     left = triggerElementOffset.left - elementOffset.width - mainAxisOffset;
+//     let triggerCenter =
+//       triggerElementOffset.top + triggerElementOffset.height / 2;
+//     top = triggerCenter - elementOffset.height / 2;
 
-    if (crossPlacement === 'top') {
-      top = triggerElementOffset.top;
-    } else if (crossPlacement === 'bottom') {
-      top =
-        triggerElementOffset.top -
-        (elementOffset.height - triggerElementOffset.height);
-    }
-  } else if (placement === 'right') {
-    left =
-      triggerElementOffset.left + triggerElementOffset.width + mainAxisOffset;
-    let triggerCenter =
-      triggerElementOffset.top + triggerElementOffset.height / 2;
-    top = triggerCenter - elementOffset.height / 2;
+//     if (crossPlacement === 'top') {
+//       top = triggerElementOffset.top;
+//     } else if (crossPlacement === 'bottom') {
+//       top =
+//         triggerElementOffset.top -
+//         (elementOffset.height - triggerElementOffset.height);
+//     }
+//   } else if (placement === 'right') {
+//     left =
+//       triggerElementOffset.left + triggerElementOffset.width + mainAxisOffset;
+//     let triggerCenter =
+//       triggerElementOffset.top + triggerElementOffset.height / 2;
+//     top = triggerCenter - elementOffset.height / 2;
 
-    if (crossPlacement === 'top') {
-      top = triggerElementOffset.top;
-    } else if (crossPlacement === 'bottom') {
-      top =
-        triggerElementOffset.top -
-        (elementOffset.height - triggerElementOffset.height);
-    }
-  }
+//     if (crossPlacement === 'top') {
+//       top = triggerElementOffset.top;
+//     } else if (crossPlacement === 'bottom') {
+//       top =
+//         triggerElementOffset.top -
+//         (elementOffset.height - triggerElementOffset.height);
+//     }
+//   }
 
-  let positions = { top, left };
+//   let positions = { top, left };
 
-  return positions;
-};
+//   return positions;
+// };
 
 const calculatePositions = (opts: any) => {
   let {
@@ -307,7 +307,7 @@ const calculatePositions = (opts: any) => {
     crossOffset,
     preventCollision,
   } = opts;
-  let container = overlayNode;
+  // let container = overlayNode;
 
   let childOffset: Offset = targetNode;
   let isContainerPositioned = false;
@@ -340,6 +340,7 @@ function calculatePositionInternal(
   placementInput: Placement,
   childOffset: any,
   overlaySize: Offset,
+  // @ts-ignore
   scrollSize: Offset,
   margins: Position,
   padding: number,
@@ -358,7 +359,7 @@ function calculatePositionInternal(
     crossSize,
     placement,
     crossPlacement,
-    axis,
+    // axis,
   } = placementInfo;
   let position = computePosition(
     childOffset,
@@ -446,12 +447,14 @@ function calculatePositionInternal(
 
 function computePosition(
   childOffset: any,
+  // @ts-ignore
   boundaryDimensions: Dimensions,
   overlaySize: Offset,
   placementInfo: ParsedPlacement,
   offset: number,
   crossOffset: number,
   containerOffsetWithBoundary: Offset,
+  // @ts-ignore
   isContainerPositioned: boolean
 ) {
   let {
@@ -501,8 +504,10 @@ function computePosition(
 
 function getAvailableSpace(
   boundaryDimensions: Dimensions,
+  // @ts-ignore
   containerOffsetWithBoundary: Offset,
   childOffset: any,
+  // @ts-ignore
   margins: Position,
   padding: number,
   placementInfo: ParsedPlacement
@@ -518,26 +523,26 @@ function getAvailableSpace(
   );
 }
 
-const AXIS = {
+const AXIS: any = {
   top: 'top',
   bottom: 'top',
   left: 'left',
   right: 'left',
 };
 
-const FLIPPED_DIRECTION = {
+const FLIPPED_DIRECTION: any = {
   top: 'bottom',
   bottom: 'top',
   left: 'right',
   right: 'left',
 };
 
-const CROSS_AXIS = {
+const CROSS_AXIS: any = {
   top: 'left',
   left: 'top',
 };
 
-const AXIS_SIZE = {
+const AXIS_SIZE: any = {
   top: 'height',
   left: 'width',
 };
@@ -564,17 +569,17 @@ interface Offset {
   height: number;
 }
 
-interface PositionOpts {
-  placement: Placement;
-  targetNode: HTMLElement;
-  overlayNode: HTMLElement;
-  scrollNode: HTMLElement;
-  padding: number;
-  shouldFlip: boolean;
-  boundaryElement: HTMLElement;
-  offset: number;
-  crossOffset: number;
-}
+// interface PositionOpts {
+//   placement: Placement;
+//   targetNode: HTMLElement;
+//   overlayNode: HTMLElement;
+//   scrollNode: HTMLElement;
+//   padding: number;
+//   shouldFlip: boolean;
+//   boundaryElement: HTMLElement;
+//   offset: number;
+//   crossOffset: number;
+// }
 
 export interface PositionResult {
   position?: Position;
