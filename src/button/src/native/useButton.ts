@@ -2,6 +2,7 @@ import type { ReactNode, RefObject } from 'react';
 import { PressEvents, usePress } from '../../../interactions/index';
 import type { AccessibilityProps, TouchableOpacityProps } from 'react-native';
 import { mergeProps } from '@react-aria/utils';
+import type { AriaLabelingProps } from '@react-types/shared';
 
 interface ButtonProps extends PressEvents {
   /** Whether the button is disabled. */
@@ -20,7 +21,7 @@ export interface ButtonAria {
 }
 
 export function useButton(
-  props: RNAriaButtonProps,
+  props: RNAriaButtonProps & AriaLabelingProps,
   ref: RefObject<any>
 ): ButtonAria {
   let {
@@ -46,7 +47,13 @@ export function useButton(
       ...rest.accessibilityState,
       disabled: isDisabled,
     },
-    disabled: isDisabled,
+    accessible: true,
+    accessibilityRole: 'button',
+    accessibilityValue:
+      props['aria-label'] ?? typeof props.children === 'string'
+        ? props.children
+        : undefined,
+    accessibilityHint: props['aria-describedby'],
   });
 
   return {
