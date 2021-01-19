@@ -18,18 +18,28 @@ export interface SwitchAria {
  * @param ref - Ref to the HTML input element.
  */
 export function useSwitch(
-  props: AriaSwitchProps,
+  props: AriaSwitchProps & AccessibilityProps,
   state: ToggleState,
   ref: RefObject<HTMLInputElement>
 ): SwitchAria {
-  let { inputProps } = useToggle(props, state, ref);
+  const { accessibilityLabel = 'Example switch', accessibilityHint } = props;
+  let { inputProps } = useToggle(
+    {
+      'aria-label': accessibilityLabel,
+      'aria-describedby': accessibilityHint,
+      ...props,
+    },
+    state,
+    ref
+  );
   let { isSelected } = state;
-
   return {
     inputProps: mergeProps(inputProps, {
       accessibilityRole: 'switch' as AccessibilityRole,
       checked: isSelected,
       accessible: true,
+      accessibilityHint,
+      accessibilityLabel,
       accessibilityState: {
         checked: isSelected,
       },

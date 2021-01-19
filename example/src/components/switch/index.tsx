@@ -128,11 +128,10 @@ export function ControlledSwitch() {
   const state = useToggleState();
   const inputRef = useRef(null);
   let { inputProps } = useSwitch(
-    { 'aria-label': 'Example switch' },
+    { accessibilityLabel: 'Example switch', accessibilityHint: 'Switch hint' },
     state,
     inputRef
   );
-
   return (
     <AriaInputWrapper {...inputProps} ref={inputRef}>
       <Switch isOn={state.isSelected} onToggle={state.toggle} />
