@@ -22,26 +22,18 @@ export function useSwitch(
   state: ToggleState,
   ref: RefObject<HTMLInputElement>
 ): SwitchAria {
-  const { accessibilityLabel = 'Example switch', accessibilityHint } = props;
-  let { inputProps } = useToggle(
-    {
-      'aria-label': accessibilityLabel,
-      'aria-describedby': accessibilityHint,
-      ...props,
-    },
-    state,
-    ref
-  );
+  let { inputProps } = useToggle(props, state, ref);
   let { isSelected } = state;
   return {
     inputProps: mergeProps(inputProps, {
       accessibilityRole: 'switch' as AccessibilityRole,
       checked: isSelected,
       accessible: true,
-      accessibilityHint,
-      accessibilityLabel,
+      accessibilityHint: props['aria-describedby'],
+      accessibilityLabel: props['aria-label'],
       accessibilityState: {
         checked: isSelected,
+        disabled: props.isDisabled,
       },
     }),
   };

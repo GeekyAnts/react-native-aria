@@ -128,7 +128,11 @@ export function ControlledSwitch() {
   const state = useToggleState();
   const inputRef = useRef(null);
   let { inputProps } = useSwitch(
-    { accessibilityLabel: 'Example switch', accessibilityHint: 'Switch hint' },
+    {
+      'aria-label': 'Example switch',
+      'isDisabled': true,
+      'aria-describedby': 'switch',
+    },
     state,
     inputRef
   );
