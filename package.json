@@ -148,14 +148,12 @@
     "@react-aria/switch": "^3.1.1",
     "@react-aria/toggle": "^3.1.1",
     "@react-aria/visually-hidden": "^3.2.1",
-    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-stately/checkbox": "^3.0.1",
     "@react-stately/collections": "^3.3.0",
     "@react-stately/radio": "^3.2.1",
     "@react-stately/select": "^3.1.1",
     "@react-stately/toggle": "^3.2.1",
     "react-dom": "^17.0.1",
-    "react-native-svg": "^12.1.0",
     "react-native-web": "^0.14.10"
   }
 }

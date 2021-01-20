@@ -4,14 +4,12 @@ import type { AccessibilityProps, TouchableOpacityProps } from 'react-native';
 import { mergeProps } from '@react-aria/utils';
 import type { AriaLabelingProps } from '@react-types/shared';
 
-interface ButtonProps extends PressEvents {
+export interface RNAriaButtonProps extends PressEvents, AccessibilityProps {
   /** Whether the button is disabled. */
   isDisabled?: boolean;
   /** The content to display in the button. */
   children?: ReactNode;
 }
-
-export interface RNAriaButtonProps extends AccessibilityProps, ButtonProps {}
 
 export interface ButtonAria {
   /** Props for the button element. */
@@ -24,19 +22,9 @@ export function useButton(
   props: RNAriaButtonProps & AriaLabelingProps,
   ref: RefObject<any>
 ): ButtonAria {
-  let {
-    isDisabled,
-    onPress,
-    onPressStart,
-    onPressEnd,
-    onPressChange,
-    ...rest
-  } = props;
+  let { isDisabled, onPress, ...rest } = props;
 
-  let { pressProps, isPressed } = usePress({
-    onPressStart,
-    onPressEnd,
-    onPressChange,
+  let { pressProps } = usePress({
     onPress,
     isDisabled,
     ref,
@@ -57,7 +45,7 @@ export function useButton(
   });
 
   return {
-    isPressed,
+    isPressed: false,
     buttonProps: mergedProps,
   };
 }
