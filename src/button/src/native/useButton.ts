@@ -67,10 +67,12 @@ export function useButton(
       ...props.accessibilityState,
       disabled: props.isDisabled,
     },
-    accessibilityValue:
-      props['aria-label'] ?? typeof props.children === 'string'
-        ? props.children
-        : undefined,
+    accessibilityValue: {
+      text:
+        props['aria-label'] ?? typeof props.children === 'string'
+          ? props.children
+          : undefined,
+    },
     accessibilityHint: props['aria-describedby'],
   };
 }
