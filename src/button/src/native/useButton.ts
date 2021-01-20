@@ -1,19 +1,20 @@
-import type { RefObject } from 'react';
-import type { AccessibilityProps } from 'react-native';
+import type { RefObject, ReactNode } from 'react';
+import type { AccessibilityProps, TouchableOpacityProps } from 'react-native';
+import type { PressEvents } from '../../../interactions';
 import type { AriaLabelingProps } from '@react-types/shared';
-// export interface RNAriaButtonProps extends PressEvents, AccessibilityProps {
-//   /** Whether the button is disabled. */
-//   isDisabled?: boolean;
-//   /** The content to display in the button. */
-//   children?: ReactNode;
-// }
+export interface RNAriaButtonProps extends PressEvents, AccessibilityProps {
+  /** Whether the button is disabled. */
+  isDisabled?: boolean;
+  /** The content to display in the button. */
+  children?: ReactNode;
+}
 
-// export interface ButtonAria {
-//   /** Props for the button element. */
-//   buttonProps: TouchableOpacityProps;
-//   /** Whether the button is currently pressed. */
-//   isPressed: boolean;
-// }
+export interface ButtonAria {
+  /** Props for the button element. */
+  buttonProps: TouchableOpacityProps;
+  /** Whether the button is currently pressed. */
+  isPressed: boolean;
+}
 
 // export function useButton(
 //   props: RNAriaButtonProps & AriaLabelingProps,
@@ -49,14 +50,14 @@ import type { AriaLabelingProps } from '@react-types/shared';
 
 type IUseButtonProps = AccessibilityProps & AriaLabelingProps;
 
-export interface AriaButton extends AccessibilityProps, AriaLabelingProps {
+export interface IAriaButton extends AccessibilityProps, AriaLabelingProps {
   onPress: any;
   isDisabled?: boolean;
   children?: any;
 }
 
 export function useButton(
-  props: Partial<AriaButton>,
+  props: Partial<IAriaButton>,
   _ref: RefObject<any>
 ): IUseButtonProps {
   return {

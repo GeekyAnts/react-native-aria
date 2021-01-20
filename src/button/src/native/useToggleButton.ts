@@ -25,7 +25,23 @@ export function useToggleButton(
   ref: RefObject<any>
 ): ButtonAria {
   const { isSelected } = state;
-  const { isPressed, buttonProps } = useButton(
+  // const { isPressed: true, buttonProps } = useButton(
+  //   {
+  //     ...props,
+  //     onPress: chain(state.toggle, props.onPress),
+  //   },
+  //   ref
+  // );
+
+  // return {
+  //   isPressed,
+  //   buttonProps: mergeProps(buttonProps, {
+  //     accessibilityState: {
+  //       selected: isSelected,
+  //     },
+  //   }),
+  // };
+  const buttonProps = useButton(
     {
       ...props,
       onPress: chain(state.toggle, props.onPress),
@@ -34,7 +50,7 @@ export function useToggleButton(
   );
 
   return {
-    isPressed,
+    isPressed: true,
     buttonProps: mergeProps(buttonProps, {
       accessibilityState: {
         selected: isSelected,
