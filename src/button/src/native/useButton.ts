@@ -35,8 +35,8 @@ export function useButton(
       ...rest.accessibilityState,
       disabled: isDisabled,
     },
-    accessible: true,
-    accessibilityRole: 'button',
+    accessible: props.accessible ?? true,
+    accessibilityRole: props.accessibilityRole ?? 'button',
     accessibilityValue:
       props['aria-label'] ?? typeof props.children === 'string'
         ? props.children
