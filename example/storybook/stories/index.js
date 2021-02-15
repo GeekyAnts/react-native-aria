@@ -6,3 +6,4 @@ import "./Switch/Switch.stories";
 import "./Menu/Menu.stories";
 import "./useOverlayPosition/useOverlayPosition.stories";
 import "./Popover/Popover.stories";
+import "./Tooltip/Tooltip.stories";

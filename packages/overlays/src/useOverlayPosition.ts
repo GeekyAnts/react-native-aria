@@ -1,12 +1,12 @@
-import type { PlacementAxis } from "@react-types/overlays";
-import React, { RefObject } from "react";
-import type { Axis, SizeAxis } from "@react-types/overlays";
+import type { PlacementAxis } from '@react-types/overlays';
+import React, { RefObject } from 'react';
+import type { Axis, SizeAxis } from '@react-types/overlays';
 import {
   I18nManager,
   //@ts-ignore
   Dimensions,
-} from "react-native";
-import type { Placement, PositionProps } from "@react-types/overlays";
+} from 'react-native';
+import type { Placement, PositionProps } from '@react-types/overlays';
 
 interface ParsedPlacement {
   placement: PlacementAxis;
@@ -47,12 +47,12 @@ interface AriaPositionProps extends PositionProps {
 export function useOverlayPosition(
   props: AriaPositionProps & { preventCollision?: boolean }
 ) {
-  const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
+  const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
   let {
     targetRef,
     overlayRef,
-    placement = "bottom" as Placement,
+    placement = 'bottom' as Placement,
     offset = 0,
     crossOffset = 0,
     shouldFlip = true,
@@ -159,9 +159,9 @@ export function useOverlayPosition(
 
 function translateRTL(position: any) {
   if (I18nManager.isRTL) {
-    return position.replace("start", "right").replace("end", "left");
+    return position.replace('start', 'right').replace('end', 'left');
   }
-  return position.replace("start", "left").replace("end", "right");
+  return position.replace('start', 'left').replace('end', 'right');
 }
 interface Position {
   top?: number;
@@ -371,7 +371,7 @@ function computePosition(
   //@ts-ignore
   position[crossAxis] = childOffset[crossAxis];
 
-  if (crossPlacement === "center") {
+  if (crossPlacement === 'center') {
     position[crossAxis] +=
       (childOffset[crossSize] - overlaySize[crossSize]) / 2;
   } else if (crossPlacement !== crossAxis) {
@@ -424,27 +424,27 @@ function getAvailableSpace(
 }
 
 const AXIS: any = {
-  top: "top",
-  bottom: "top",
-  left: "left",
-  right: "left",
+  top: 'top',
+  bottom: 'top',
+  left: 'left',
+  right: 'left',
 };
 
 const FLIPPED_DIRECTION: any = {
-  top: "bottom",
-  bottom: "top",
-  left: "right",
-  right: "left",
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
 };
 
 const CROSS_AXIS: any = {
-  top: "left",
-  left: "top",
+  top: 'left',
+  left: 'top',
 };
 
 const AXIS_SIZE: any = {
-  top: "height",
-  left: "width",
+  top: 'height',
+  left: 'width',
 };
 
 interface Position {
@@ -484,12 +484,12 @@ function parsePlacement(input: Placement): ParsedPlacement {
     return PARSED_PLACEMENT_CACHE[input];
   }
 
-  let [placement, crossPlacement] = input.split(" ");
-  let axis: Axis = AXIS[placement] || "right";
+  let [placement, crossPlacement] = input.split(' ');
+  let axis: Axis = AXIS[placement] || 'right';
   let crossAxis: Axis = CROSS_AXIS[axis];
 
   if (!AXIS[crossPlacement]) {
-    crossPlacement = "center";
+    crossPlacement = 'center';
   }
 
   let size = AXIS_SIZE[axis];

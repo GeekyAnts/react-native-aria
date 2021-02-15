@@ -1,3 +1,3 @@
-export * from './useOverlayPosition.web';
+export * from './useOverlayPosition';
 export * from './useOverlayTrigger.web';
 export * from './Portal';

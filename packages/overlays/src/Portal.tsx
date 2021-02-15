@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { ModalProvider, useModalProvider } from '@react-aria/overlays';
 import type { ReactNode } from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { Platform, StyleSheet, View, ViewProps } from 'react-native';
+import ReactDOM from 'react-dom';
 
 type OverlayItem = {
   id: number;
@@ -114,6 +115,10 @@ export function OverlayProviderScoped(props: ModalProviderProps) {
 export function OverlayContainer(props: ModalProviderProps) {
   const context = usePortalProvider();
   let contents = <OverlayProviderScoped {...props} />;
+
+  if (Platform.OS === 'web') {
+    return ReactDOM.createPortal(contents, document.body);
+  }
 
   useEffect(
     () => {
