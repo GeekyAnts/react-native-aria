@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import {
   OverlayContainer,
-  OverlayProvider,
   useOverlayPosition,
 } from "@react-native-aria/overlays";
 
@@ -25,7 +24,7 @@ function CloseButton(props: any) {
   );
 }
 
-const PopoverContent = ({ targetRef }) => {
+const OverlayContent = ({ targetRef }) => {
   let overlayRef = React.useRef(null);
   const { overlayProps } = useOverlayPosition({
     placement: "top",
@@ -41,41 +40,12 @@ const PopoverContent = ({ targetRef }) => {
         ...overlayProps.style,
       }}
     >
-      <View
-        style={{
-          shadowColor: "##D1D5DB",
-          elevation: 4,
-          borderWidth: 1,
-          borderColor: "#D1D5DB",
-        }}
-      >
-        <View style={{ padding: 10, backgroundColor: "#F3F4F6" }}>
-          <Text>Popover Title </Text>
-        </View>
-        <View style={{ maxWidth: 200, padding: 10 }}>
-          <Text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
-          </Text>
-        </View>
-        <View
-          style={{
-            padding: 10,
-            flexDirection: "row",
-            justifyContent: "space-around",
-          }}
-        >
-          <Button onPress={() => {}} title="Yes"></Button>
-          <Button onPress={() => {}} title="No"></Button>
-        </View>
-      </View>
+      <Text>This content will be mounted in OverlayProvider</Text>
     </View>
   );
 };
 
-export function PopoverExample(props: any) {
+export function OverlayContainerExample(props: any) {
   const [visible, setVisible] = React.useState(false);
 
   let ref = React.useRef(null);
@@ -98,8 +68,8 @@ export function PopoverExample(props: any) {
       </Pressable>
       {visible && (
         <OverlayContainer>
-          <CloseButton onClose={() => setVisible(false)}></CloseButton>
-          <PopoverContent targetRef={ref} />
+          <CloseButton onClose={() => setVisible(!visible)} />
+          <OverlayContent targetRef={ref} />
         </OverlayContainer>
       )}
     </View>

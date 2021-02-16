@@ -1,8 +1,9 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { MenuButton } from './index';
-import { Item } from '@react-stately/collections';
-import { View } from 'react-native';
+import React from "react";
+import { storiesOf } from "@storybook/react-native";
+import { MenuButton } from "./index";
+import { Item } from "@react-stately/collections";
+import { View } from "react-native";
+import { Wrapper } from "../Wrapper";
 
 const MenuExample = () => {
   return (
@@ -19,4 +20,4 @@ const Example = () => {
   return <MenuExample />;
 };
 
-storiesOf('Menu', module).add('Menu', Example);
+storiesOf("Menu", module).add("Menu", Example);

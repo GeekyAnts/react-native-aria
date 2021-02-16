@@ -55,6 +55,7 @@ export function useOverlayPosition(
     placement = 'bottom' as Placement,
     offset = 0,
     crossOffset = 0,
+    isOpen = true,
     shouldFlip = true,
     preventCollision = true,
   } = props;
@@ -95,12 +96,12 @@ export function useOverlayPosition(
     }
 
     // Sometimes returned values are 0, 0 so calling it here instead of using setTimeout
-    if (props.isOpen) {
+    if (isOpen) {
       requestAnimationFrame(setInitialOffsets);
     } else {
       setElementStyle({ ...elementStyles, opacity: 0 });
     }
-  }, [targetRef, overlayRef, props.isOpen]);
+  }, [targetRef, overlayRef, isOpen]);
 
   let overlayPosition = React.useMemo(
     () =>
