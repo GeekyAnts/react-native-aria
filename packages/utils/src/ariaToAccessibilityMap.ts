@@ -46,10 +46,14 @@ const ariaToAccessibilityMap = {
 
 // Refer - https://necolas.github.io/react-native-web/docs/accessibility/
 export const mapDomPropsToRN = (props: any) => {
-  let newProps: any = {};
+  let newProps: any = props;
 
   if (props.tabIndex === '0' || props.tabIndex === 0) {
     newProps.focusable = true;
+  }
+
+  if (props.tabIndex === '-1' || props.tabIndex === -1) {
+    newProps.focusable = false;
   }
 
   if (props.role) {

@@ -16,8 +16,13 @@ const MenuExample = () => {
     </View>
   );
 };
+
 const Example = () => {
-  return <MenuExample />;
+  return (
+    <Wrapper>
+      <MenuExample />
+    </Wrapper>
+  );
 };
 
 storiesOf("Menu", module).add("Menu", Example);
