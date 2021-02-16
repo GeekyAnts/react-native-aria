@@ -8,7 +8,6 @@ import {
   useOverlay,
 } from "@react-native-aria/overlays";
 import { useMenu, useMenuItem, useMenuTrigger } from "@react-native-aria/menu";
-import { useButton } from "@react-native-aria/button";
 import {
   TouchableWithoutFeedback,
   View,
@@ -40,12 +39,10 @@ export function MenuButton(props) {
   let { menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref);
 
   // Get props for the button based on the trigger props from useMenuTrigger
-  let { buttonProps } = useButton(menuTriggerProps, ref);
-
   return (
     <View style={{ alignSelf: "center" }}>
       <Pressable
-        {...buttonProps}
+        {...menuTriggerProps}
         ref={ref}
         accessibilityRole="button"
         accessibilityLabel="Click here to perform some actions"
