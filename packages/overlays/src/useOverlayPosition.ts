@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { PlacementAxis } from '@react-types/overlays';
 import React, { RefObject } from 'react';
 import type { Axis, SizeAxis } from '@react-types/overlays';

@@ -125,7 +125,7 @@ export function OverlayProviderScoped(props: ModalProviderProps) {
  */
 export function OverlayContainer(props: ModalProviderProps) {
   const context = usePortalProvider();
-  const overlayId = React.useRef<number | null>(null);
+  const overlayId = React.useRef<number | undefined>(undefined);
   let contents = <OverlayProviderScoped {...props} />;
 
   useEffect(
@@ -136,7 +136,9 @@ export function OverlayContainer(props: ModalProviderProps) {
       }
       // Update
       else {
-        context?.updateOverlayItem(overlayId.current, contents);
+        if (overlayId.current) {
+          context?.updateOverlayItem(overlayId.current, contents);
+        }
       }
     },
     // To re-render the child

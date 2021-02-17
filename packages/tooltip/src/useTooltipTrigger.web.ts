@@ -1,11 +1,8 @@
-import { FocusEvents } from '@react-types/shared';
 import {
   getInteractionModality,
-  HoverProps,
   isFocusVisible,
-  PressProps,
 } from '@react-aria/interactions';
-import { HTMLAttributes, RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import { mergeProps, useId } from '@react-aria/utils';
 import { TooltipTriggerProps } from '@react-types/tooltip';
 import { TooltipTriggerState } from '@react-stately/tooltip';
@@ -16,15 +13,12 @@ interface TooltipTriggerAria {
   /**
    * Props for the trigger element.
    */
-  triggerProps: HTMLAttributes<HTMLElement> &
-    PressProps &
-    HoverProps &
-    FocusEvents;
+  triggerProps: any;
 
   /**
    * Props for the overlay container element.
    */
-  tooltipProps: HTMLAttributes<HTMLElement>;
+  tooltipProps: any;
 }
 
 /**
@@ -56,7 +50,7 @@ export function useTooltipTrigger(
   };
 
   useEffect(() => {
-    let onKeyDown = (e) => {
+    let onKeyDown = (e: any) => {
       if (ref && ref.current) {
         // Escape after clicking something can give it keyboard focus
         // dismiss tooltip on esc key press
@@ -71,6 +65,8 @@ export function useTooltipTrigger(
         document.removeEventListener('keydown', onKeyDown, true);
       };
     }
+
+    return () => {};
   }, [ref, state]);
 
   let onHoverStart = () => {
@@ -143,6 +139,7 @@ export function useTooltipTrigger(
   return {
     triggerProps: {
       accessibilityDescribedBy: state.isOpen ? tooltipId : undefined,
+      //@ts-ignore
       ...mergeProps(focusableProps, hoverProps, pressProps),
     },
     tooltipProps: {

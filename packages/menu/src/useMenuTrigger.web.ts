@@ -1,6 +1,6 @@
-import { AriaButtonProps } from '@react-types/button';
+import type { AriaButtonProps } from '@react-types/button';
 import { HTMLAttributes, RefObject, useEffect } from 'react';
-import { MenuTriggerState } from '@react-stately/menu';
+import type { MenuTriggerState } from '@react-stately/menu';
 import { useMenuTrigger as useMenuTriggerWeb } from '@react-aria/menu';
 import { mapDomPropsToRN } from '@react-native-aria/utils';
 

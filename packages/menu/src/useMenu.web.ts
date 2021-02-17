@@ -1,7 +1,7 @@
 import { useMenu as useMenuWeb, AriaMenuOptions } from '@react-aria/menu';
 import { TreeState } from '@react-stately/tree';
 import { mapDomPropsToRN } from '@react-native-aria/utils';
-import { RefObject, useEffect } from 'react';
+import { RefObject } from 'react';
 
 export const useMenu = (
   props: AriaMenuOptions<unknown> & { accessibilityLabel: string },

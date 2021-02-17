@@ -77,7 +77,7 @@ export function useOverlay(
   };
 
   // Handle the escape key
-  let onKeyDown = (e) => {
+  let onKeyDown = (e: any) => {
     if (e.key === 'Escape' && !isKeyboardDismissDisabled) {
       e.preventDefault();
       onHide();
@@ -89,7 +89,7 @@ export function useOverlay(
   let { focusWithinProps } = useFocusWithin({
     isDisabled: !shouldCloseOnBlur,
     onBlurWithin: () => {
-      onClose();
+      onClose && onClose();
     },
   });
 

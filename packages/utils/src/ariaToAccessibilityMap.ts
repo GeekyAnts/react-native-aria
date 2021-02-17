@@ -1,4 +1,4 @@
-const ariaToAccessibilityMap = {
+const ariaToAccessibilityMap: any = {
   'aria-activedescendant': 'accessibilityActiveDescendant',
   'aria-atomic': 'accessibilityAtomic',
   'aria-autocomplete': 'accessibilityAutoComplete',

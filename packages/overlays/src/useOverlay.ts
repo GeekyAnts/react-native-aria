@@ -1,5 +1,4 @@
-import { HTMLAttributes, RefObject, useEffect } from 'react';
-import { useFocusWithin } from '@react-aria/interactions';
+import { HTMLAttributes, RefObject } from 'react';
 
 interface OverlayProps {
   /** Whether the overlay is currently open. */
@@ -36,8 +35,6 @@ interface OverlayAria {
   /** Props to apply to the overlay container element. */
   overlayProps: HTMLAttributes<HTMLElement>;
 }
-
-const visibleOverlays: RefObject<HTMLElement>[] = [];
 
 /**
  * Provides the behavior for overlays such as dialogs, popovers, and menus.
