@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 2</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.7">
+        <g id="Landing-page-ReactNative-Aria" transform="translate(-800.000000, -986.000000)">
+            <g id="Group-11" transform="translate(741.000000, 987.000000)">
+                <g id="Group-2" transform="translate(60.000000, 0.000000)">
+                    <path d="M50,0 C77.6142375,0 100,22.3857625 100,50 C100,77.6142375 77.6142375,100 50,100 C31.8412294,100 15.9433612,90.3199263 7.18514783,75.8385314 L10.7694026,75.8380052 C19.1714751,88.5694003 33.6047404,96.969697 50,96.969697 C75.9406473,96.969697 96.969697,75.9406473 96.969697,50 C96.969697,24.0593527 75.9406473,3.03030303 50,3.03030303 C24.0593527,3.03030303 3.03030303,24.0593527 3.03030303,50 C3.03030303,55.3611912 3.92851867,60.5125928 5.58267194,65.311927 L2.38813684,65.3119987 C0.837425448,60.48635 0,55.3409706 0,50 C0,22.3857625 22.3857625,0 50,0 Z" id="Combined-Shape" stroke="#3F3874" fill="#4B3AB1" fill-rule="nonzero"></path>
+                    <g id="Group" transform="translate(20.289855, 24.637681)" stroke="#4B3AB1" stroke-width="2">
+                        <rect id="Rectangle-Copy" x="8.69565217" y="0" width="52.173913" height="44.9275362" rx="4"></rect>
+                        <rect id="Rectangle" fill="#E3E2EE" x="0" y="13.0434783" width="30.4347826" height="39.1304348" rx="4"></rect>
+                    </g>
+                    <circle id="Oval" stroke="#3D3A70" fill="#3D3A70" cx="6.52173913" cy="70.2898551" r="2.17391304"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
