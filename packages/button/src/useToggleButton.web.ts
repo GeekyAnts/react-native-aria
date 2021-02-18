@@ -39,6 +39,10 @@ export function useToggleButton(
   return {
     isPressed,
     buttonProps: mergeProps(buttonProps, {
+      // For v0.14+
+      'aria-pressed': isSelected,
+      
+      // For v0.15+
       accessibilityPressed: isSelected,
     }),
   };
