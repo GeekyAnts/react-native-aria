@@ -5,7 +5,6 @@ import {
 } from "@react-native-aria/overlays";
 import { useButton } from "@react-native-aria/button";
 import {
-  Modal,
   View,
   Text,
   Pressable,
