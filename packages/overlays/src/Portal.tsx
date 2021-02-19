@@ -131,7 +131,7 @@ export function OverlayContainer(props: ModalProviderProps) {
   useEffect(
     () => {
       // Mount
-      if (overlayId.current === null) {
+      if (overlayId.current === undefined) {
         overlayId.current = context?.setOverlayItem(contents);
       }
       // Update
