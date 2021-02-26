@@ -1,3 +1,4 @@
+import "./Combobox/Combobox.stories";
 import "./Listbox/Listbox.stories";
 import "./Tabs/Tabs.stories";
 import "./Menu/Menu.stories";
