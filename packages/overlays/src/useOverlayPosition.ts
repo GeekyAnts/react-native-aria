@@ -6,9 +6,13 @@ import {
   I18nManager,
   //@ts-ignore
   Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
 
+const safeAreaInset = {
+  top: 0,
+};
 interface ParsedPlacement {
   placement: PlacementAxis;
   crossPlacement: PlacementAxis;
@@ -45,10 +49,8 @@ interface AriaPositionProps extends PositionProps {
   onClose?: () => void;
 }
 
-export function useOverlayPosition(
-  props: AriaPositionProps & { preventCollision?: boolean }
-) {
-  const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
+export function useOverlayPosition(props: AriaPositionProps) {
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
   let {
     targetRef,
@@ -58,20 +60,16 @@ export function useOverlayPosition(
     crossOffset = 0,
     isOpen = true,
     shouldFlip = true,
-    preventCollision = true,
   } = props;
 
-  const [elementStyles, setElementStyle] = React.useState({
+  const [overlayNodeOffset, setOverlayNodeOffset] = React.useState({
     top: 0,
     left: 0,
     width: 0,
     height: 0,
-
-    // Keep opacity 0 to prevent initial rendering
-    opacity: 0,
   });
 
-  const [triggerElementOffset, settriggerElementOffset] = React.useState({
+  const [triggerNodeOffset, setTriggerOffset] = React.useState({
     top: 0,
     left: 0,
     width: 0,
@@ -83,14 +81,15 @@ export function useOverlayPosition(
       if (targetRef && targetRef.current) {
         targetRef.current.measureInWindow(
           (left: number, top: number, width: number, height: number) => {
-            settriggerElementOffset({ left, top, width, height });
+            setTriggerOffset({ left, top, width, height });
           }
         );
       }
+
       if (overlayRef && overlayRef.current) {
         overlayRef.current.measureInWindow(
           (left: number, top: number, width: number, height: number) => {
-            setElementStyle({ left, top, width, height, opacity: 1 });
+            setOverlayNodeOffset({ left, top, width, height });
           }
         );
       }
@@ -100,22 +99,17 @@ export function useOverlayPosition(
     if (isOpen) {
       requestAnimationFrame(setInitialOffsets);
     } else {
-      setElementStyle({ ...elementStyles, opacity: 0 });
+      setOverlayNodeOffset(overlayNodeOffset);
     }
   }, [targetRef, overlayRef, isOpen]);
 
   let overlayPosition = React.useMemo(
     () =>
-      calculatePositions({
+      calculatePosition({
         placement: translateRTL(placement),
-        targetNode: triggerElementOffset,
-        overlayNode: elementStyles,
-        scrollNode: {
-          top: 0,
-          left: 0,
-          width: windowWidth,
-          height: windowHeight,
-        },
+        targetNode: triggerNodeOffset,
+        overlayNode: overlayNodeOffset,
+        scrollNode: overlayNodeOffset,
         padding: 0,
         shouldFlip,
         boundaryElement: {
@@ -126,11 +120,10 @@ export function useOverlayPosition(
         },
         offset,
         crossOffset,
-        preventCollision,
       }),
     [
-      triggerElementOffset,
-      elementStyles,
+      triggerNodeOffset,
+      overlayNodeOffset,
       placement,
       offset,
       shouldFlip,
@@ -144,8 +137,7 @@ export function useOverlayPosition(
     overlayProps: {
       style: {
         ...overlayPosition.position,
-        maxHeight: overlayPosition.maxHeight,
-        opacity: elementStyles.opacity,
+        maxHeight: overlayPosition.maxHeight - safeAreaInset.top,
       },
     },
     placement: overlayPosition.placement,
@@ -203,7 +195,7 @@ export interface PositionResult {
   placement: PlacementAxis;
 }
 
-const calculatePositions = (opts: any) => {
+const calculatePosition = (opts: any): PositionResult => {
   let {
     placement,
     targetNode,
@@ -214,7 +206,6 @@ const calculatePositions = (opts: any) => {
     boundaryElement,
     offset,
     crossOffset,
-    preventCollision,
   } = opts;
 
   let childOffset: Offset = targetNode;
@@ -238,8 +229,7 @@ const calculatePositions = (opts: any) => {
     containerOffsetWithBoundary,
     offset,
     crossOffset,
-    isContainerPositioned,
-    preventCollision
+    isContainerPositioned
   );
 };
 
@@ -255,8 +245,7 @@ function calculatePositionInternal(
   containerOffsetWithBoundary: Offset,
   offset: number,
   crossOffset: number,
-  isContainerPositioned: boolean,
-  preventCollision: boolean
+  isContainerPositioned: boolean
 ): PositionResult {
   let placementInfo = parsePlacement(placementInput);
   let {
@@ -277,7 +266,7 @@ function calculatePositionInternal(
     containerOffsetWithBoundary,
     isContainerPositioned
   );
-
+  let normalizedOffset = offset;
   let space = getAvailableSpace(
     boundaryDimensions,
     containerOffsetWithBoundary,
@@ -287,7 +276,7 @@ function calculatePositionInternal(
     placementInfo
   );
 
-  if (flip && overlaySize[size] > space) {
+  if (flip && scrollSize[size] > space) {
     let flippedPlacementInfo = parsePlacement(
       `${FLIPPED_DIRECTION[placement]} ${crossPlacement}` as Placement
     );
@@ -314,30 +303,49 @@ function calculatePositionInternal(
     if (flippedSpace > space) {
       placementInfo = flippedPlacementInfo;
       position = flippedPosition;
+      normalizedOffset = offset;
     }
   }
 
-  if (preventCollision) {
-    // Check collisions with edges - Worst case scenerio
+  let delta = getDelta(
+    crossAxis,
+    position[crossAxis],
+    overlaySize[crossSize],
+    boundaryDimensions,
+    padding
+  );
+  position[crossAxis] += delta;
 
-    // If popover colliding with right side of window
-    position.left = Math.min(
-      position.left,
-      boundaryDimensions.width - containerOffsetWithBoundary.width
-    );
+  let maxHeight = getMaxHeight(
+    position,
+    boundaryDimensions,
+    containerOffsetWithBoundary,
+    childOffset,
+    margins,
+    padding
+  );
 
-    // If popover colliding with bottom of window
-    position.top = Math.min(
-      position.top,
-      boundaryDimensions.height - containerOffsetWithBoundary.height
-    );
+  overlaySize.height = Math.min(overlaySize.height, maxHeight);
 
-    // If popover colliding with top of window
-    position.top = Math.max(position.top, 0);
+  position = computePosition(
+    childOffset,
+    boundaryDimensions,
+    overlaySize,
+    placementInfo,
+    normalizedOffset,
+    crossOffset,
+    containerOffsetWithBoundary,
+    isContainerPositioned
+  );
 
-    // If popover colliding with left side of window
-    position.left = Math.max(position.left, 0);
-  }
+  delta = getDelta(
+    crossAxis,
+    position[crossAxis],
+    overlaySize[crossSize],
+    boundaryDimensions,
+    padding
+  );
+  position[crossAxis] += delta;
 
   let arrowPosition: Position = {};
   arrowPosition[crossAxis] =
@@ -345,10 +353,56 @@ function calculatePositionInternal(
 
   return {
     position,
+    maxHeight,
     arrowOffsetLeft: arrowPosition.left,
     arrowOffsetTop: arrowPosition.top,
     placement: placementInfo.placement,
   };
+}
+
+function getDelta(
+  axis: Axis,
+  offset: number,
+  size: number,
+  containerDimensions: Dimensions,
+  padding: number
+) {
+  let containerScroll = containerDimensions[axis];
+  let containerHeight = containerDimensions[AXIS_SIZE[axis]];
+
+  let startEdgeOffset = offset - padding - containerScroll;
+  let endEdgeOffset = offset + padding - containerScroll + size;
+
+  if (startEdgeOffset < 0) {
+    return -startEdgeOffset;
+  } else if (endEdgeOffset > containerHeight) {
+    return Math.max(containerHeight - endEdgeOffset, -startEdgeOffset);
+  } else {
+    return 0;
+  }
+}
+
+function getMaxHeight(
+  position: Position,
+  boundaryDimensions: Dimensions,
+  containerOffsetWithBoundary: Offset,
+  childOffset: Offset,
+  margins: Position,
+  padding: number
+) {
+  return position.top != null
+    ? // We want the distance between the top of the overlay to the bottom of the boundary
+      Math.max(
+        0,
+        boundaryDimensions.height - // this is the bottom of the boundary
+          position.top // this is the top of the overlay
+      )
+    : // We want the distance between the top of the trigger to the top of the boundary
+      Math.max(
+        0,
+        childOffset.top - // this is the top of the trigger
+          0 // this is the top of the boundary
+      );
 }
 
 function computePosition(
@@ -396,9 +450,16 @@ function computePosition(
     maxViablePosition
   );
 
+  // Floor these so the position isn't placed on a partial pixel, only whole pixels. Shouldn't matter if it was floored or ceiled, so chose one.
   if (placement === axis) {
-    const containerHeight = containerOffsetWithBoundary[size];
-    position[axis] = Math.floor(childOffset[axis] - containerHeight - offset);
+    // If the container is positioned (non-static), then we use the container's actual
+    // height, as `bottom` will be relative to this height.  But if the container is static,
+    // then it can only be the `document.body`, and `bottom` will be relative to _its_
+    // container, which should be as large as boundaryDimensions.
+    const containerHeight = boundaryDimensions[size];
+    position[FLIPPED_DIRECTION[axis]] = Math.floor(
+      containerHeight - childOffset[axis] + offset
+    );
   } else {
     position[axis] = Math.floor(childOffset[axis] + childOffset[size] + offset);
   }

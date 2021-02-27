@@ -10,8 +10,13 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   StyleSheet,
+  findNodeHandle,
+  ScrollView,
+  Platform,
+  SafeAreaView,
 } from "react-native";
 import { useToggleState } from "@react-stately/toggle";
+import { OverlayProvider } from "@react-native-aria/overlays";
 
 // Button to close overlay on outside click
 function CloseButton(props) {
@@ -56,69 +61,83 @@ const OverlayView = ({ targetRef, placement }) => {
   let overlayRef = React.useRef();
 
   const { overlayProps } = useOverlayPosition({
-    placement,
+    placement: "bottom",
     targetRef,
     overlayRef,
+    shouldFlip: false,
     offset: 10,
   });
 
   return (
-    <View
+    <ScrollView
+      bounces={false}
       style={{
         position: "absolute",
+        height: 200,
+        backgroundColor: "lightgray",
         ...overlayProps.style,
       }}
-      ref={overlayRef}
+      ref={(node) => {
+        if (Platform.OS === "web") {
+          overlayRef.current = findNodeHandle(node);
+        } else {
+          overlayRef.current = node;
+        }
+      }}
     >
       <View
         style={{
-          backgroundColor: "lightgray",
           padding: 20,
+          height: 3000,
         }}
       >
         <Text>Hello world</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
-export function Trigger({ placement }: any) {
+export default function Trigger({ placement }: any) {
   let ref = React.useRef();
   const toggleState = useToggleState();
 
   let { buttonProps } = useButton({ onPress: toggleState.toggle }, ref);
 
   return (
-    <View
-      style={{
-        height: 400,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Pressable
-        {...buttonProps}
-        ref={ref}
-        accessibilityRole="button"
-        accessibilityLabel="Click here to perform some actions"
-      >
+    <OverlayProvider>
+      <SafeAreaView>
         <View
           style={{
-            flexDirection: "row",
-            borderWidth: 1,
-            paddingHorizontal: 10,
-            paddingVertical: 10,
+            height: 400,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Text>Trigger</Text>
+          <Pressable
+            {...buttonProps}
+            ref={ref}
+            accessibilityRole="button"
+            accessibilityLabel="Click here to perform some actions"
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                borderWidth: 1,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+              }}
+            >
+              <Text>Trigger</Text>
+            </View>
+          </Pressable>
+          {toggleState.isSelected && (
+            <OverlayContainer>
+              <CloseButton onClose={toggleState.toggle} />
+              <OverlayView targetRef={ref} placement={placement} />
+            </OverlayContainer>
+          )}
         </View>
-      </Pressable>
-      {toggleState.isSelected && (
-        <OverlayContainer>
-          <CloseButton onClose={toggleState.toggle} />
-          <OverlayView targetRef={ref} placement={placement} />
-        </OverlayContainer>
-      )}
-    </View>
+      </SafeAreaView>
+    </OverlayProvider>
   );
 }
