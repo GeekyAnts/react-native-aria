@@ -1,4 +1,3 @@
-//@ts-nocheck
 import type { PlacementAxis } from '@react-types/overlays';
 import React, { RefObject } from 'react';
 import type { Axis, SizeAxis } from '@react-types/overlays';
@@ -10,9 +9,6 @@ import {
 } from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
 
-const safeAreaInset = {
-  top: 0,
-};
 interface ParsedPlacement {
   placement: PlacementAxis;
   crossPlacement: PlacementAxis;
@@ -133,11 +129,10 @@ export function useOverlayPosition(props: AriaPositionProps) {
     ]
   );
 
-  return {
+  const returnProps = {
     overlayProps: {
       style: {
         ...overlayPosition.position,
-        maxHeight: overlayPosition.maxHeight - safeAreaInset.top,
       },
     },
     placement: overlayPosition.placement,
@@ -146,9 +141,16 @@ export function useOverlayPosition(props: AriaPositionProps) {
         left: overlayPosition.arrowOffsetLeft,
         top: overlayPosition.arrowOffsetTop,
       },
+      updatePosition: () => {},
     },
-    updatePosition: () => {},
   };
+
+  if (overlayPosition.maxHeight !== undefined) {
+    //@ts-ignore
+    returnProps.overlayProps.maxHeight = overlayPosition.maxHeight;
+  }
+
+  return returnProps;
 }
 
 function translateRTL(position: any) {
@@ -157,6 +159,7 @@ function translateRTL(position: any) {
   }
   return position.replace('start', 'left').replace('end', 'right');
 }
+
 interface Position {
   top?: number;
   left?: number;
@@ -367,7 +370,9 @@ function getDelta(
   containerDimensions: Dimensions,
   padding: number
 ) {
+  //@ts-ignore
   let containerScroll = containerDimensions[axis];
+  //@ts-ignore
   let containerHeight = containerDimensions[AXIS_SIZE[axis]];
 
   let startEdgeOffset = offset - padding - containerScroll;
