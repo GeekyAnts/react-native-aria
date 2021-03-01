@@ -3,5 +3,9 @@ import { SafeAreaView } from "react-native";
 import { OverlayProvider } from "@react-native-aria/overlays";
 
 export function Wrapper({ children }) {
-  return <OverlayProvider>{children}</OverlayProvider>;
+  return (
+    <OverlayProvider>
+      <SafeAreaView>{children}</SafeAreaView>
+    </OverlayProvider>
+  );
 }

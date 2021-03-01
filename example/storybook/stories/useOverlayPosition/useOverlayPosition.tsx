@@ -16,9 +16,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useToggleState } from "@react-stately/toggle";
-import { OverlayProvider } from "@react-native-aria/overlays";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Button to close overlay on outside click
 function CloseButton(props) {
@@ -61,17 +58,12 @@ export function TriggerWrapper() {
 
 const OverlayView = ({ targetRef, placement }) => {
   let overlayRef = React.useRef();
-  const insets = useSafeAreaInsets();
 
   const { overlayProps } = useOverlayPosition({
     placement: "top",
     targetRef,
     overlayRef,
-    shouldFlip: false,
     offset: 10,
-    safeAriaInsets: {
-      ...insets,
-    },
   });
 
   return (
@@ -79,7 +71,7 @@ const OverlayView = ({ targetRef, placement }) => {
       bounces={false}
       style={{
         position: "absolute",
-        height: 500,
+        height: 400,
         backgroundColor: "lightgray",
         ...overlayProps.style,
       }}
@@ -110,42 +102,36 @@ export default function Trigger({ placement }: any) {
   let { buttonProps } = useButton({ onPress: toggleState.toggle }, ref);
 
   return (
-    <SafeAreaProvider>
-      <OverlayProvider>
-        <SafeAreaView>
-          <View
-            style={{
-              height: 400,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Pressable
-              {...buttonProps}
-              ref={ref}
-              accessibilityRole="button"
-              accessibilityLabel="Click here to perform some actions"
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  borderWidth: 1,
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                }}
-              >
-                <Text>Trigger</Text>
-              </View>
-            </Pressable>
-            {toggleState.isSelected && (
-              <OverlayContainer>
-                <CloseButton onClose={toggleState.toggle} />
-                <OverlayView targetRef={ref} placement={placement} />
-              </OverlayContainer>
-            )}
-          </View>
-        </SafeAreaView>
-      </OverlayProvider>
-    </SafeAreaProvider>
+    <View
+      style={{
+        height: 400,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Pressable
+        {...buttonProps}
+        ref={ref}
+        accessibilityRole="button"
+        accessibilityLabel="Click here to perform some actions"
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            borderWidth: 1,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+        >
+          <Text>Trigger</Text>
+        </View>
+      </Pressable>
+      {toggleState.isSelected && (
+        <OverlayContainer>
+          <CloseButton onClose={toggleState.toggle} />
+          <OverlayView targetRef={ref} placement={placement} />
+        </OverlayContainer>
+      )}
+    </View>
   );
 }
