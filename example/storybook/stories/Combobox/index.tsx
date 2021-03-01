@@ -4,7 +4,15 @@ import { useButton } from "@react-native-aria/button";
 import { useComboBoxState } from "@react-stately/combobox";
 import { useComboBox } from "@react-native-aria/combobox";
 import { useListBox, useOption } from "@react-native-aria/listbox";
-import { View, Text, Pressable, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  TextInput,
+  ScrollView,
+  findNodeHandle,
+  Platform,
+} from "react-native";
 
 function contains(string, substring) {
   if (substring.length === 0) {
@@ -123,14 +131,21 @@ function ListBoxPopup(props) {
   // to allow screen reader users to dismiss the popup easily.
   return (
     <View ref={popoverRef}>
-      <View
+      <ScrollView
         {...mergeProps(listBoxProps, otherProps)}
-        ref={listBoxRef}
+        ref={(node) => {
+          if (Platform.OS === "web") {
+            listBoxRef.current = findNodeHandle(node);
+          } else {
+            listBoxRef.current = node;
+          }
+        }}
         style={{
           position: "absolute",
           width: "100%",
           margin: 4,
           background: "lightgray",
+          maxHeight: 100,
         }}
       >
         {[...state.collection].map((item) => (
@@ -141,7 +156,7 @@ function ListBoxPopup(props) {
             state={state}
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 }
