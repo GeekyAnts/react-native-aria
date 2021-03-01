@@ -11,6 +11,7 @@ export const Example = () => {
         label="Choose an option"
         selectionMode="multiple"
         defaultSelectedKeys={["one"]}
+        shouldFocusWrap
       >
         <Item key="one">One</Item>
         <Item key="two">Two</Item>
