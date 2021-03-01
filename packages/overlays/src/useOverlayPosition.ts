@@ -5,9 +5,19 @@ import {
   I18nManager,
   //@ts-ignore
   Dimensions,
-  useWindowDimensions,
 } from 'react-native';
 import type { Placement, PositionProps } from '@react-types/overlays';
+
+const measureOffset = (ref: RefObject<any>) =>
+  new Promise<IMeasureResult>((resolve) => {
+    if (ref.current) {
+      ref.current.measureInWindow(
+        (x: number, y: number, width: number, height: number) => {
+          resolve({ top: y, left: x, width, height });
+        }
+      );
+    }
+  });
 
 interface ParsedPlacement {
   placement: PlacementAxis;
@@ -45,9 +55,14 @@ interface AriaPositionProps extends PositionProps {
   onClose?: () => void;
 }
 
-export function useOverlayPosition(props: AriaPositionProps) {
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+type IMeasureResult = {
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+};
 
+export function useOverlayPosition(props: AriaPositionProps) {
   let {
     targetRef,
     overlayRef,
@@ -58,96 +73,88 @@ export function useOverlayPosition(props: AriaPositionProps) {
     shouldFlip = true,
   } = props;
 
-  const [overlayNodeOffset, setOverlayNodeOffset] = React.useState({
-    top: 0,
-    left: 0,
-    width: 0,
-    height: 0,
+  let [position, setPosition] = React.useState<PositionResult>({
+    position: {},
+    arrowOffsetLeft: undefined,
+    arrowOffsetTop: undefined,
+    maxHeight: undefined,
+    placement: undefined,
   });
 
-  const [triggerNodeOffset, setTriggerOffset] = React.useState({
-    top: 0,
-    left: 0,
-    width: 0,
-    height: 0,
-  });
+  // Layout measurement happens asynchronously in RN. This causes initial flickr. Using opacity and setting it to 1 post calculation prevents that.
+  let [opacity, setOpacity] = React.useState<number>(0);
+
+  let updatePosition = async () => {
+    const [overlayOffset, triggerOffset] = await Promise.all([
+      measureOffset(overlayRef),
+      measureOffset(targetRef),
+    ]);
+
+    // Sometimes measure returns height/width 0. Best solution would be to use onLayout callback, but that might diverege from React Aria's useOverlayPosition API. Decide later, this works for now
+    if (
+      !overlayOffset.width ||
+      !overlayOffset.height ||
+      !triggerOffset.width ||
+      !triggerOffset.height
+    ) {
+      requestAnimationFrame(updatePosition);
+      return;
+    }
+
+    const { height: windowHeight, width: windowWidth } = Dimensions.get(
+      'window'
+    );
+
+    const positions = calculatePosition({
+      placement: translateRTL(placement),
+      targetNode: triggerOffset,
+      overlayNode: overlayOffset,
+      scrollNode: overlayOffset,
+      padding: 0,
+      shouldFlip,
+      boundaryElement: {
+        top: 0,
+        left: 0,
+        width: windowWidth,
+        height: windowHeight,
+      },
+      offset,
+      crossOffset,
+    });
+    setPosition(positions);
+    setOpacity(1);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      setOpacity(0);
+    };
+  }, []);
 
   React.useLayoutEffect(() => {
-    function setInitialOffsets() {
-      if (targetRef && targetRef.current) {
-        targetRef.current.measureInWindow(
-          (left: number, top: number, width: number, height: number) => {
-            setTriggerOffset({ left, top, width, height });
-          }
-        );
-      }
-
-      if (overlayRef && overlayRef.current) {
-        overlayRef.current.measureInWindow(
-          (left: number, top: number, width: number, height: number) => {
-            setOverlayNodeOffset({ left, top, width, height });
-          }
-        );
-      }
-    }
-
-    // Sometimes returned values are 0, 0 so calling it here instead of using setTimeout
-    if (isOpen) {
-      requestAnimationFrame(setInitialOffsets);
-    } else {
-      setOverlayNodeOffset(overlayNodeOffset);
-    }
-  }, [targetRef, overlayRef, isOpen]);
-
-  let overlayPosition = React.useMemo(
-    () =>
-      calculatePosition({
-        placement: translateRTL(placement),
-        targetNode: triggerNodeOffset,
-        overlayNode: overlayNodeOffset,
-        scrollNode: overlayNodeOffset,
-        padding: 0,
-        shouldFlip,
-        boundaryElement: {
-          top: 0,
-          left: 0,
-          width: windowWidth,
-          height: windowHeight,
-        },
-        offset,
-        crossOffset,
-      }),
-    [
-      triggerNodeOffset,
-      overlayNodeOffset,
-      placement,
-      offset,
-      shouldFlip,
-      windowHeight,
-      windowWidth,
-      crossOffset,
-    ]
-  );
+    updatePosition();
+  }, [isOpen]);
 
   const returnProps = {
     overlayProps: {
       style: {
-        ...overlayPosition.position,
+        ...position.position,
+        opacity,
       },
     },
-    placement: overlayPosition.placement,
+    placement: position.placement,
     arrowProps: {
       style: {
-        left: overlayPosition.arrowOffsetLeft,
-        top: overlayPosition.arrowOffsetTop,
+        left: position.arrowOffsetLeft,
+        top: position.arrowOffsetTop,
       },
-      updatePosition: () => {},
     },
+    updatePosition,
   };
 
-  if (overlayPosition.maxHeight !== undefined) {
+  if (position.maxHeight !== undefined) {
     //@ts-ignore
-    returnProps.overlayProps.maxHeight = overlayPosition.maxHeight;
+    returnProps.overlayProps.style.maxHeight = position.maxHeight;
   }
 
   return returnProps;
@@ -187,15 +194,7 @@ export interface PositionResult {
   arrowOffsetLeft?: number;
   arrowOffsetTop?: number;
   maxHeight?: number;
-  placement: PlacementAxis;
-}
-
-export interface PositionResult {
-  position?: Position;
-  arrowOffsetLeft?: number;
-  arrowOffsetTop?: number;
-  maxHeight?: number;
-  placement: PlacementAxis;
+  placement: PlacementAxis | undefined;
 }
 
 const calculatePosition = (opts: any): PositionResult => {
@@ -251,14 +250,7 @@ function calculatePositionInternal(
   isContainerPositioned: boolean
 ): PositionResult {
   let placementInfo = parsePlacement(placementInput);
-  let {
-    size,
-    crossAxis,
-    crossSize,
-    placement,
-    crossPlacement,
-    axis,
-  } = placementInfo;
+  let { size, crossAxis, crossSize, placement, crossPlacement } = placementInfo;
   let position = computePosition(
     childOffset,
     boundaryDimensions,
@@ -535,14 +527,6 @@ interface Offset {
   left: number;
   width: number;
   height: number;
-}
-
-export interface PositionResult {
-  position?: Position;
-  arrowOffsetLeft?: number;
-  arrowOffsetTop?: number;
-  maxHeight?: number;
-  placement: PlacementAxis;
 }
 
 const PARSED_PLACEMENT_CACHE: any = {};
