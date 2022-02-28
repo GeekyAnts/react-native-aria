@@ -27,30 +27,11 @@ import { RefObject } from 'react';
 //@ts-ignore
 export function useTable<T>(
   props: any,
-  state: TableState<any>,
+  inputState: TableState<any>,
   ref: RefObject<HTMLElement>
 ): GridAria {
-  console.log('Hello world');
-  // let gridProps = { role: 'grid' };
-
-  // gridProps['aria-label'] = props['aria-label'] ?? props?.accessibilityLabel;
-
-  // return {
-  //   gridProps: mapDomPropsToRN(gridProps),
-  // };
-  let { selectionMode, selectionBehavior } = props;
-  let tableState = useTableState({
-    ...props,
-    // showSelectionCheckboxes:
-    // selectionMode === 'multiple' && selectionBehavior !== 'replace',
-  });
-
-  // let { collection } = state;
-  // let { gridProps } = useTable(props, state, ref);
   let newProps = { ...props, 'aria-label': props.accessibilityLabel };
-  let params = useTableWeb(newProps, tableState, ref);
-  // // params.menuProps = mapDomPropsToRN(params.menuProps);
-  // console.log(params, 'Params');
-
-  return {};
+  let params = useTableWeb(newProps, inputState, ref);
+  params.gridProps = mapDomPropsToRN(params.gridProps);
+  return params;
 }
