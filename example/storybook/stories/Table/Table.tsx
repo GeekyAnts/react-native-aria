@@ -14,12 +14,14 @@ import {
   useTableSelectAllCheckbox,
   useTableSelectionCheckbox,
 } from "@react-aria/table";
-import { useTable as useTableRNA } from "../../../../packages/table/src";
-import { useTableRowGroup as useTableRowGroupRNA } from "../../../../packages/table/src";
-import { useTableHeaderRow as useTableHeaderRowRNA } from "../../../../packages/table/src";
-import { useTableRow as useTableRowRNA } from "../../../../packages/table/src";
-import { useTableCell as useTableCellRNA } from "../../../../packages/table/src";
-import { useTableColumnHeader as useTableColumnHeaderRNA } from "../../../../packages/table/src";
+import {
+  useTable,
+  useTableRowGroup,
+  useTableHeaderRow,
+  useTableRow,
+  useTableCell,
+  useTableColumnHeader,
+} from "@react-native-aria/table";
 import { useToggleState } from "@react-stately/toggle";
 import { useCheckbox } from "@react-aria/checkbox";
 
@@ -64,7 +66,7 @@ function TableSelectAllCell({ column, state }) {
   let ref = useRef();
   let isSingleSelectionMode = state.selectionManager.selectionMode === "single";
 
-  let { columnHeaderProps } = useTableColumnHeaderRNA(
+  let { columnHeaderProps } = useTableColumnHeader(
     { node: column },
     state,
     ref
@@ -95,7 +97,7 @@ function TableRow({ item, children, state }) {
   let ref = useRef();
   let isSelected = state.selectionManager.isSelected(item.key);
 
-  let { rowProps } = useTableRowRNA({ node: item }, state, ref);
+  let { rowProps } = useTableRow({ node: item }, state, ref);
 
   // console.log("$$$$", rowProps);
   let { isFocusVisible, focusProps } = useFocusRing();
@@ -121,7 +123,7 @@ function TableRow({ item, children, state }) {
 
 function TableCheckboxCell({ cell, state }) {
   let ref = useRef();
-  let { gridCellProps } = useTableCellRNA({ node: cell }, state, ref);
+  let { gridCellProps } = useTableCell({ node: cell }, state, ref);
   let { checkboxProps } = useTableSelectionCheckbox(
     { key: cell.parentKey },
     state
@@ -143,7 +145,7 @@ function TableCheckboxCell({ cell, state }) {
 
 function TableCell({ cell, state }) {
   let ref = useRef();
-  let { gridCellProps } = useTableCellRNA({ node: cell }, state, ref);
+  let { gridCellProps } = useTableCell({ node: cell }, state, ref);
   // console.log("!!!", gridCellProps);
   let { isFocusVisible, focusProps } = useFocusRing();
 
@@ -163,7 +165,7 @@ function TableCell({ cell, state }) {
 }
 
 function TableRowGroup({ type: Element, style, children }) {
-  let { rowGroupProps } = useTableRowGroupRNA();
+  let { rowGroupProps } = useTableRowGroup();
 
   // console.log("row group", rowGroupProps);
   return (
@@ -175,7 +177,7 @@ function TableRowGroup({ type: Element, style, children }) {
 
 function TableHeaderRow({ item, state, children }) {
   let ref = useRef();
-  let { rowProps } = useTableHeaderRowRNA({ node: item });
+  let { rowProps } = useTableHeaderRow({ node: item });
   return (
     <tr {...rowProps} ref={ref}>
       {children}
@@ -186,7 +188,7 @@ function TableHeaderRow({ item, state, children }) {
 function TableColumnHeader({ column, state }) {
   let ref = useRef();
 
-  let { columnHeaderProps } = useTableColumnHeaderRNA(
+  let { columnHeaderProps } = useTableColumnHeader(
     { node: column },
     state,
     ref
@@ -236,7 +238,7 @@ function Table(props) {
   let ref = useRef();
   let { collection } = state;
 
-  let { gridProps } = useTableRNA(props, state, ref);
+  let { gridProps } = useTable(props, state, ref);
   // console.log("&&&&&", gridProps);
 
   return (
