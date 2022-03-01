@@ -14,6 +14,7 @@ import { GridNode } from '@react-types/grid';
 import { HTMLAttributes } from 'react';
 // @ts-ignore
 import { mapDomPropsToRN } from '@react-native-aria/utils';
+import { useTableColumnHeader as useTableColumnHeaderWeb } from '@react-aria/table';
 
 interface ColumnHeaderProps {
   /** An object representing the [column header](https://www.w3.org/TR/wai-aria-1.1/#columnheader). Contains all the relevant information that makes up the column header. */
@@ -35,14 +36,13 @@ interface ColumnHeaderAria {
  */
 //@ts-ignore
 export function useTableColumnHeader<T>(
-  props: ColumnHeaderProps
+  props: ColumnHeaderProps,
+  state: any,
+  ref: any
 ): ColumnHeaderAria {
-  const columnHeaderProps = mapDomPropsToRN({
-    role: 'row',
-    ...props,
-  });
+  const { columnHeaderProps } = useTableColumnHeaderWeb(props, state, ref);
 
   return {
-    columnHeaderProps,
+    columnHeaderProps: mapDomPropsToRN(columnHeaderProps),
   };
 }
