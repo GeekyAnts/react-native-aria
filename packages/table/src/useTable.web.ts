@@ -14,8 +14,7 @@ import { GridAria } from '@react-aria/grid';
 //@ts-ignore
 import { mapDomPropsToRN } from '@react-native-aria/utils';
 import { useTable as useTableWeb } from '@react-aria/table';
-// import { TreeState } from '@react-stately/tree';
-import { TableState, useTableState } from '@react-stately/table';
+import { TableState } from '@react-stately/table';
 import { RefObject } from 'react';
 
 /**
