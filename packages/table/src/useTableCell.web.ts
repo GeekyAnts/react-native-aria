@@ -10,13 +10,31 @@
  * governing permissions and limitations under the License.
  */
 
-import { HTMLAttributes } from 'react';
 //@ts-ignore
 import { mapDomPropsToRN } from '@react-native-aria/utils';
+import { GridNode } from '@react-types/grid';
+import { HTMLAttributes, RefObject } from 'react';
+import { TableState } from '@react-stately/table';
+import { useTableCell as useTableCellWeb } from '@react-aria/table';
+
+interface TableCellProps {
+  /** An object representing the table cell. Contains all the relevant information that makes up the row header. */
+  node: GridNode<unknown>;
+  /** Whether the cell is contained in a virtual scroller. */
+  isVirtualized?: boolean;
+  /**
+   * Handler that is called when a user performs an action on the cell.
+   * Please use onCellAction at the collection level instead.
+   * @deprecated
+   **/
+  onAction?: () => void;
+}
 
 interface TableCellAria {
   /** Props for the table cell element. */
   gridCellProps: HTMLAttributes<HTMLElement>;
+  /** Whether the cell is currently in a pressed state. */
+  isPressed: boolean;
 }
 
 /**
@@ -26,12 +44,15 @@ interface TableCellAria {
  * @param ref - The ref attached to the cell element.
  */
 //@ts-ignore
-export function useTableCell<T>(): TableCellAria {
-  const gridCellProps = mapDomPropsToRN({
-    role: 'gridcell',
-  });
+export function useTableCell<T>(
+  props: TableCellProps,
+  state: TableState<T>,
+  ref: RefObject<HTMLElement>
+): TableCellAria {
+  const { gridCellProps, isPressed } = useTableCellWeb(props, state, ref);
 
   return {
-    gridCellProps,
+    gridCellProps: mapDomPropsToRN(gridCellProps),
+    isPressed,
   };
 }
