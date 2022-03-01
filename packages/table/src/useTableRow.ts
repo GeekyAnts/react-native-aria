@@ -1,6 +1,5 @@
-import { GridRowProps } from '@react-aria/grid';
-
-export function useTableRow<T>(props: GridRowProps<T>): any {
+//@ts-ignore
+export function useTableRow<T>(_props: any, _state: any, _ref: any): any {
   return {
     rowProps: {},
   };

@@ -9,22 +9,20 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-
-import { GridRowProps } from '@react-aria/grid';
 //@ts-ignore
 import { mapDomPropsToRN } from '@react-native-aria/utils';
+import { useTableRow as useTableRowWeb } from '@react-aria/table';
 
 /**
  * Provides the behavior and accessibility implementation for a row in a table.
  * @param props - Props for the row.
  * @param state - State of the table, as returned by `useTableState`.
  */
-export function useTableRow<T>(props: GridRowProps<T>): any {
-  const rowProps = mapDomPropsToRN({
-    ...props,
-    role: 'row',
-  });
+//@ts-ignore
+export function useTableRow<T>(props: any, state: any, ref: any): any {
+  const { rowProps } = useTableRowWeb(props, state, ref);
+
   return {
-    rowProps,
+    rowProps: mapDomPropsToRN(rowProps),
   };
 }
