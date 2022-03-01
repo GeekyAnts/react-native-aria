@@ -28,12 +28,16 @@ export interface TableHeaderRowAria {
 export function useTableHeaderRow<T>(
   props: GridRowProps<T>
 ): TableHeaderRowAria {
-  const rowProps = mapDomPropsToRN({
-    ...props,
-    role: 'columnheader',
-  });
+  let { node, isVirtualized } = props;
+  let rowProps = {
+    role: 'row',
+  };
+
+  if (isVirtualized) {
+    rowProps['aria-rowindex'] = node.index + 1; // aria-rowindex is 1 based
+  }
 
   return {
-    rowProps,
+    rowProps: mapDomPropsToRN(rowProps),
   };
 }
