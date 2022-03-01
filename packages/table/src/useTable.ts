@@ -1,7 +1,10 @@
+import { RefObject } from 'react';
+import { TableState } from '@react-stately/table';
+
 export function useTable<T>(
-  props: TableProps<T>,
-  state: TableState<T>,
-  ref: RefObject<HTMLElement>
+  _props: any,
+  _state: TableState<T>,
+  _ref: RefObject<HTMLElement>
 ): any {
   return {
     gridProps: {},
