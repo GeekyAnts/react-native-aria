@@ -7,7 +7,11 @@ interface ColumnHeaderProps {
   isVirtualized?: boolean;
 }
 //@ts-ignore
-export function useTableColumnHeader<T>(props: ColumnHeaderProps): any {
+export function useTableColumnHeader<T>(
+  _props: ColumnHeaderProps,
+  _state: any,
+  _ref: any
+): any {
   return {
     columnHeaderProps: {},
   };
