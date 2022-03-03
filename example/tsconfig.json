@@ -13,7 +13,10 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "paths": {
-      "@react-native-aria/*": ["../packages/*/src/index"]
-    },
-  }
+      "@react-native-aria/*": [
+        "../packages/*/src/index"
+      ]
+    }
+  },
+  "extends": "expo/tsconfig.base"
 }
