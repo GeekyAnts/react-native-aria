@@ -1,3 +1,6 @@
+# ⛔️ DEPRECATED
+We have deprecated this repository and migrated our codebase to a new mono repository structure, please follow [this](https://github.com/gluestack/react-native-aria) link to access our latest updates and features.
+
 ### 1) Introduction
 
 React Native ARIA helps you build accessible and rich Apps with React Native. It handles behaviour, accessibility and interactions so you can implement custom components and design systems for Android, iOS and Web.
