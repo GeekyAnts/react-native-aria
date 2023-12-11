@@ -1,5 +1,5 @@
 # ⛔️ DEPRECATED
-We have deprecated this repository and migrated our codebase to a new mono repository structure, please follow [this](https://github.com/gluestack/react-native-aria) link to access our latest updates and features.
+We have deprecated this repository and migrated our codebase to a new mono repository structure, please follow [this](https://github.com/gluestack/gluestack-ui) link to access our latest updates and features.
 
 ### 1) Introduction
 
